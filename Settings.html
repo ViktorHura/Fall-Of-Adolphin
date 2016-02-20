@@ -1,0 +1,77 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Fall of Adolphin</title>
+		<style>
+		html { 
+        background: url(images/BackgroundM.png) no-repeat center center fixed; 
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        }
+		</style>
+		
+		<div id='Setd' style="position:absolute;">
+      <form id="settings" action="form_action.asp">
+      <font size= '5' color="dark green">Dialogtime:</font>         <input type="text" name="dialogt" value="2"> <font color="0x009900"> - Amount of seconds that dialog text stays on screen</font><br>
+	  
+      <font size= '5' color="dark green">Mouse Sensitivity: </font> <input type="text" name="mouss" value="15">  <font color="0x009900"> - How fast/slow you can look around</font><br><br>
+	  <font size= '5' color="dark green">Effects Volume: </font> <input type="text" name="vol" value="1">  <font color="0x009900"> - How loud the effects volume is.</font><br><br>
+	  
+	  
+     <input type="Button" onclick="Save()" value="Save">
+	 <input type="Button" onclick="window.open('index.html','_self',false)" value="Main Menu">
+    </form> 
+		</div>
+	    
+	
+	
+	</head>
+	<body>
+		<script>
+		
+		function SetPos(){
+		
+		document.getElementById('Setd').style.left = window.innerWidth / 2 - 100;
+		document.getElementById('Setd').style.top = window.innerHeight / 4;
+		document.getElementById('Setd').style.height = 100 + 'px';
+		document.getElementById('Setd').style.width = 200 + 'px';
+		
+			
+		
+		}
+		SetPos();
+		
+			var Pos = setInterval(function(){
+			
+			//console.log(document.cookie);
+		   
+			SetPos();
+					
+			}, 1);
+	    
+		var x = document.getElementById("settings");
+		x.dialogt.value = document.cookie.replace(/(?:(?:^|.*;\s*)dialogtime\s*\=\s*([^;]*).*$)|^.*$/, "$1") / 1000;
+		x.mouss.value = document.cookie.replace(/(?:(?:^|.*;\s*)sensitivity\s*\=\s*([^;]*).*$)|^.*$/, "$1") * 10000;
+		x.vol.value = document.cookie.replace(/(?:(?:^|.*;\s*)volume\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+		
+        var sensitivity;
+		var dialogtime;
+		var volume;
+		
+		function Save(){
+		dialogtime = x.dialogt.value * 1000;
+		sensitivity = x.mouss.value / 10000;
+		volume = x.vol.value;
+		
+		document.cookie="dialogtime=" + dialogtime;
+		document.cookie="sensitivity=" + sensitivity;
+		document.cookie="volume=" + volume;
+
+        
+		}
+		
+		</script>
+	</body>
+</html>

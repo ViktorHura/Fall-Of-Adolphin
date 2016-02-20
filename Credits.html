@@ -1,0 +1,58 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Fall of Adolphin</title>
+		<style>
+		html { 
+        background: url(images/BackgroundM.png) no-repeat center center fixed; 
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        }
+		</style>
+		
+		<div id='Setd' style="position:absolute;">
+		
+		<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/InteractiveResource" property="dct:title" rel="dct:type">Fall of Adolphin</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="mailto:viktorhura.info@gmail.com" property="cc:attributionName" rel="cc:attributionURL">Viktor Hura</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.<br />Permissions beyond the scope of this license may be available at <a xmlns:cc="http://creativecommons.org/ns#" href="viktorhura.info@gmail.com" rel="cc:morePermissions">viktorhura.info@gmail.com</a>.
+		
+		
+		</div>
+		<div id='Text' style="position:absolute;">
+	    <font size= '5' color="white">Hello, not many people visit this page. I'm Viktor Hura, the guy who made this thing. So who made all of this? Every texture is made by me using paint.net software. The game engine is made 95% from scratch using the Three js demo as the base. Three.js? Yes that's the rendering engine I use for Webgl. I want to thank jeromeetienne for providing  <a href='http://www.threejsgames.com/extensions/'>THREEx extentions </a>for 'House2'. You can find my source code at <a href='https://bitbucket.org/ViktorHura/viktorhura.bitbucket.org'>My bitbucket</a>. You are free to use it for your own needs <br> <br> <a href='http://threejs.org/'>Three.js </a> <br> <br> <input type="Button" onclick="window.open('index.html','_self',false)" value="Main Menu"> </font> 
+	
+	
+	    </div>
+	</head>
+	<body>
+		<script>
+		
+		function SetPos(){
+		
+		document.getElementById('Setd').style.left = window.innerWidth / 2 - 200;
+		document.getElementById('Setd').style.top = window.innerHeight / 4 + 500;
+		document.getElementById('Setd').style.height = 100 + 'px';
+		document.getElementById('Setd').style.width = 400 + 'px';
+		
+		document.getElementById('Text').style.left = window.innerWidth / 2 - 200;
+		document.getElementById('Text').style.top = window.innerHeight / 4;
+		document.getElementById('Text').style.height = 100 + 'px';
+		document.getElementById('Text').style.width = 400 + 'px';
+			
+		
+		}
+		SetPos();
+		
+			var Pos = setInterval(function(){
+			
+			
+		   
+			SetPos();
+					
+			}, 1);
+	    
+		
+		
+		</script>
+	</body>
+</html>

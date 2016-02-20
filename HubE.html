@@ -1,0 +1,768 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Fall of Adolphin</title>
+		<style>
+			html, body {
+				width: 100%;
+				height: 100%;
+			}
+
+			body {
+				background-color: #ffffff;
+				margin: 0;
+				overflow: hidden;
+				font-family: arial;
+			}
+			
+			
+			#blocker {
+
+				position: absolute;
+
+				width: 100%;
+				height: 100%;
+
+				
+
+			}
+
+			#instructions {
+
+				width: 100%;
+				height: 100%;
+
+				display: -webkit-box;
+				display: -moz-box;
+				display: box;
+
+				-webkit-box-orient: horizontal;
+				-moz-box-orient: horizontal;
+				box-orient: horizontal;
+
+				-webkit-box-pack: center;
+				-moz-box-pack: center;
+				box-pack: center;
+
+				-webkit-box-align: center;
+				-moz-box-align: center;
+				box-align: center;
+
+				color: #ffffff;
+				text-align: center;
+
+				cursor: pointer;
+
+			}
+			
+            
+
+		</style>
+	</head>
+	<body id='body' >
+		<script src="Three.js"></script>
+		<script src="Settings.js"></script>
+		
+		<script src="PointerLockControls.js"></script>
+        <script src="https://code.createjs.com/soundjs-0.6.2.min.js"></script></head>
+        <script src="SoundHub.js"></script>
+		
+
+        
+		
+		<div id="blocker">
+
+			<div id="instructions">
+			
+				<img src="images/ResumeB.png"  id='Play' style="position:absolute;"	>
+				<img src="images/ExitB.png" onclick="window.open('index.html','_self',false)" id='Exit' style="position:absolute;"	>
+				<span id='Info' style="font-size:40px;color: brown; visibility: hidden;">Loading...</span>
+				<br />
+				
+			</div>
+
+		</div>
+		</div>
+		
+		<div id="HUD" style="position:absolute;">
+		
+		<span id="dialog"  style="position:absolute;font-size:150%;width: 650px;color: brown;"></span>
+		<img src="images/Dialog.png" id="dialogBg" style="position:absolute;"	>
+		<span id="health"  style="position:absolute;font-size:100%;width: 300px;color: Green;">100%</span>
+		<img src="images/Status.png" id="Status" style="position:absolute;">
+		<img src="images/Crosshair.png" id="Crosshair" style="position:absolute;">
+		
+		
+		
+		</div>
+
+		<script>
+		     
+			var Wing;
+			var arrow;
+			var HitO;
+		    var IsHitting = false;
+			var ecooldown = false;
+			var WingDistance = 5000;
+			
+			
+		  
+		    var loadingscreen = setInterval(function(){
+			
+			if (loaded == true){
+					document.getElementById('Info').innerHTML ='Click to Play';
+					
+					}
+					
+			}, 250);
+            
+			var clearedC = false;
+			
+			var ClearStuff = setInterval(function(){
+			
+			if (document.getElementById('dialog').innerHTML == '[Press E]' && clearedC == false ){
+			clearedC = true;
+            setTimeout(function(){ document.getElementById('dialog').innerHTML = ''; clearedC = false; }, dialogtime);			
+					
+			}
+			
+					
+			}, 1);
+
+           
+			function getDistance(mesh1, mesh2) {
+            var dx = mesh1.position.x - mesh2.position.x;
+            var dy = mesh1.position.y - mesh2.position.y;
+            var dz = mesh1.position.z - mesh2.position.z;
+            distance = Math.sqrt(dx*dx+dy*dy+dz*dz);
+			//console.log(distance);
+           }
+			
+				
+ 
+			var camera, scene, renderer;
+			var geometry, material, mesh;
+			var controls;
+			var map;
+			var Ekey = false;
+			var objects = [];
+            
+			var distance;
+		    
+			
+			
+			
+			var loaded = false;
+			
+			var hp = 100;
+
+			var objects = [];
+			
+		
+
+			var blocker = document.getElementById( 'blocker' );
+			var instructions = document.getElementById( 'instructions' );
+
+			// http://www.html5rocks.com/en/tutorials/pointerlock/intro/
+
+			var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
+
+			if ( havePointerLock ) {
+
+				var element = document.body;
+
+				var pointerlockchange = function ( event ) {
+
+					if ( document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element ) {
+
+						if (loaded == true){
+						controlsEnabled = true;
+						controls.enabled = true;
+
+						blocker.style.display = 'none';
+						}
+
+					} else {
+
+						controls.enabled = false;
+
+						blocker.style.display = '-webkit-box';
+						blocker.style.display = '-moz-box';
+						blocker.style.display = 'box';
+
+						instructions.style.display = '';
+
+					}
+
+				};
+
+				var pointerlockerror = function ( event ) {
+
+					instructions.style.display = '';
+
+				};
+
+				// Hook pointer lock state change events
+				document.addEventListener( 'pointerlockchange', pointerlockchange, false );
+				document.addEventListener( 'mozpointerlockchange', pointerlockchange, false );
+				document.addEventListener( 'webkitpointerlockchange', pointerlockchange, false );
+
+				document.addEventListener( 'pointerlockerror', pointerlockerror, false );
+				document.addEventListener( 'mozpointerlockerror', pointerlockerror, false );
+				document.addEventListener( 'webkitpointerlockerror', pointerlockerror, false );
+
+				instructions.addEventListener( 'click', function ( event ) {
+
+					instructions.style.display = 'none';
+
+					// Ask the browser to lock the pointer
+					element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
+
+					if ( /Firefox/i.test( navigator.userAgent ) ) {
+
+						var fullscreenchange = function ( event ) {
+
+							if ( document.fullscreenElement === element || document.mozFullscreenElement === element || document.mozFullScreenElement === element ) {
+
+								document.removeEventListener( 'fullscreenchange', fullscreenchange );
+								document.removeEventListener( 'mozfullscreenchange', fullscreenchange );
+
+								element.requestPointerLock();
+							}
+
+						};
+
+						document.addEventListener( 'fullscreenchange', fullscreenchange, false );
+						document.addEventListener( 'mozfullscreenchange', fullscreenchange, false );
+
+						element.requestFullscreen = element.requestFullscreen || element.mozRequestFullscreen || element.mozRequestFullScreen || element.webkitRequestFullscreen;
+
+						element.requestFullscreen();
+
+					} else {
+
+						element.requestPointerLock();
+
+					}
+
+				}, false );
+
+			} else {
+
+				instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
+
+			}
+
+			init();
+			animate();
+
+			var controlsEnabled = false;
+
+			var moveForward = false;
+			var moveBackward = false;
+			var moveLeft = false;
+			var moveRight = false;
+			var Sprint = false;
+			var canJump = false;
+			
+
+			var prevTime = performance.now();
+			var velocity = new THREE.Vector3();
+
+			function init() {
+
+				camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+
+
+				scene = new THREE.Scene();
+				//scene.fog = new THREE.Fog( 0xffffff, 3000, 3000 );
+
+				var light = new THREE.HemisphereLight( 0xeeeeff, 0x777788, 0.75 );
+				light.position.set( 0.5, 1, 0.75 );
+				scene.add( light );
+
+				controls = new THREE.PointerLockControls( camera );
+				scene.add( controls.getObject() );
+
+				var onKeyDown = function ( event ) {
+
+					switch ( event.keyCode ) {
+
+						case 90: // up
+						case 87: // w
+							moveForward = true;
+							break;
+
+						case 81: // left
+						case 65: // a
+							moveLeft = true; break;
+
+						case 40: // down
+						case 83: // s
+							moveBackward = true;
+							break;
+
+						case 39: // right
+						case 68: // d
+							moveRight = true;
+							break;
+							
+						case 69: // E
+						    if (ecooldown == false){
+							Ekey = true;
+							}
+							break;
+							
+						
+						case 16: // shift
+							Sprint = true;
+							break;
+
+						case 32: // space
+							if ( canJump === true ) velocity.y += 400;
+							canJump = false;
+							break;
+
+					}
+
+				};
+
+				var onKeyUp = function ( event ) {
+
+					switch( event.keyCode ) {
+
+						case 90: // up
+						case 87: // w
+							moveForward = false;
+							break;
+
+						case 81: // left
+						case 65: // a
+							moveLeft = false;
+							break;
+
+						case 40: // down
+						case 83: // s
+							moveBackward = false;
+							break;
+
+						case 39: // right
+						case 68: // d
+							moveRight = false;
+							break;
+						
+						case 69: // E
+							Ekey = false;
+							ecooldown = true;
+							setTimeout(function(){ ecooldown = false; }, 5000);
+							break;
+							
+							case 16: // shift
+							Sprint = false;
+							break;
+
+					}
+
+				};
+				
+				
+				document.addEventListener( 'keydown', onKeyDown, false );
+				document.addEventListener( 'keyup', onKeyUp, false );
+
+				
+				// floor
+
+				
+				// objects
+				
+				
+               
+				
+			   
+				
+				
+				    
+				renderer = new THREE.WebGLRenderer();
+				renderer.setClearColor( 0xffffff );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				document.body.appendChild( renderer.domElement );
+				
+
+				//
+				
+				var loader = new THREE.ObjectLoader();
+                 loader.load("scene.json",function ( obj ) {
+				 loaded = true;
+				 controls.getObject().rotation.y = 3.14;
+				 map = obj;
+                 scene.add( map );
+				 objects.push(map);
+                 });
+				 
+				 
+				
+                 loader.load("Gun.json",function ( obj2 ) {
+				 
+				 obj2.scale.set(1,1,1);
+				 Wing = obj2;
+				 Wing.position.set(5,-8,-7);
+				 Wing.rotation.set(0.05,1.4,-0.1);
+				 
+	
+                 camera.add( Wing );
+                 
+				 
+                 });
+				 
+
+				window.addEventListener( 'resize', onWindowResize, false );
+
+			}
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+			
+			
+			
+			
+			
+			
+			
+		
+			
+			var CollisionDetection = setInterval(function(){
+			
+			
+			// WALS////////////////////////////////
+			if (controls.getObject().position.x > 1155){
+					controls.getObject().position.x = 1155;	
+			}
+			
+			if (controls.getObject().position.x < -1240){
+					controls.getObject().position.x = -1240;
+			}
+			
+			if (controls.getObject().position.z > 1060){
+					controls.getObject().position.z = 1060;	
+			}
+			
+			if (controls.getObject().position.z < -700){
+					controls.getObject().position.z = -700;
+			}
+			/////////////////////////////////////////////
+			//HOUSE1/////////////////////////////////
+			
+			
+			if ( controls.getObject().position.z < 230 && controls.getObject().position.z > 25  &&
+			controls.getObject().position.x > 180 && controls.getObject().position.x < 480){
+			
+		    if (controls.getObject().position.z > 210){ controls.getObject().position.z = 230; }
+			else if (controls.getObject().position.z < 50){ controls.getObject().position.z = 25 }
+			else if (controls.getObject().position.x < 200){ controls.getObject().position.x = 180 }
+			else if (controls.getObject().position.x > 470){ controls.getObject().position.x = 480 }
+			
+			}
+			
+			/////////////////////////////////////////////////
+			
+			/////////////////////////////////////////////
+			//HOUSE2/////////////////////////////////
+			
+			
+			if ( controls.getObject().position.z < 230 && controls.getObject().position.z > 25  &&
+			controls.getObject().position.x > 535 && controls.getObject().position.x < 840){
+			
+		    if (controls.getObject().position.z > 220){ controls.getObject().position.z = 230; }
+			else if (controls.getObject().position.z < 35){ controls.getObject().position.z = 25 }
+			else if (controls.getObject().position.x < 545){ controls.getObject().position.x = 535 }
+			else if (controls.getObject().position.x > 830){ controls.getObject().position.x = 840 }
+			
+			}
+			
+			/////////////////////////////////////////////////
+			
+			/////////////////////////////////////////////
+			//HOUSE3/////////////////////////////////
+			
+			
+			if ( controls.getObject().position.z < -120 && controls.getObject().position.z > -340  &&
+			controls.getObject().position.x > 180 && controls.getObject().position.x < 480){
+			
+		    if (controls.getObject().position.z > -140){ controls.getObject().position.z = -120; }
+			else if (controls.getObject().position.z < -290){ controls.getObject().position.z = -340 }
+			else if (controls.getObject().position.x < 200){ controls.getObject().position.x = 180 }
+			else if (controls.getObject().position.x > 470){ controls.getObject().position.x = 480 }
+			
+			}
+			
+			/////////////////////////////////////////////////
+			
+			/////////////////////////////////////////////
+			//HOUSE4/////////////////////////////////
+			
+			
+			if ( controls.getObject().position.z < -120 && controls.getObject().position.z > -320  &&
+			controls.getObject().position.x > 535 && controls.getObject().position.x < 840){
+			
+		    if (controls.getObject().position.z > -140){ controls.getObject().position.z = -120; }
+			else if (controls.getObject().position.z < -290){ controls.getObject().position.z = -320 }
+			else if (controls.getObject().position.x < 545){ controls.getObject().position.x = 535 }
+			else if (controls.getObject().position.x > 830){ controls.getObject().position.x = 840 }
+			
+			}
+			
+			/////////////////////////////////////////////////
+			
+			/////////////////////////////////////////////
+			//HOUSE5/////////////////////////////////
+			
+			
+			if ( controls.getObject().position.z < -500 && controls.getObject().position.z > -700  &&
+			controls.getObject().position.x > 535 && controls.getObject().position.x < 840){
+			
+		    if (controls.getObject().position.z > -520){ controls.getObject().position.z = -500; }
+			else if (controls.getObject().position.z < -680){ controls.getObject().position.z = -700 }
+			else if (controls.getObject().position.x < 545){ controls.getObject().position.x = 535 }
+			else if (controls.getObject().position.x > 830){ controls.getObject().position.x = 840 }
+			
+			}
+			
+			/////////////////////////////////////////////////
+			
+			/////////////////////////////////////////////
+			//HOUSE6/////////////////////////////////
+			
+			
+			if ( controls.getObject().position.z < -500 && controls.getObject().position.z > -700  &&
+			controls.getObject().position.x > 180 && controls.getObject().position.x < 480){
+			
+		    if (controls.getObject().position.z > -520){ controls.getObject().position.z = -500; }
+			else if (controls.getObject().position.z < -680){ controls.getObject().position.z = -700 }
+			else if (controls.getObject().position.x < 200){ controls.getObject().position.x = 180 }
+			else if (controls.getObject().position.x > 470){ controls.getObject().position.x = 480 }
+			
+			}
+			
+			/////////////////////////////////////////////////
+			
+			/////////////////////////////////////////////
+			//BUNKER/////////////////////////////////
+			
+			
+			if ( controls.getObject().position.z < 480 && controls.getObject().position.z > -560  &&
+			controls.getObject().position.x > -1250 && controls.getObject().position.x < -770){
+			
+		    if (controls.getObject().position.z > 440){ controls.getObject().position.z = 480; }//
+			else if (controls.getObject().position.z < -540){ controls.getObject().position.z = -560 }
+			else if (controls.getObject().position.x < -1170){ controls.getObject().position.x = -1250 }
+			else if (controls.getObject().position.x > -800){ controls.getObject().position.x = -770 }
+			
+			}
+			
+			/////////////////////////////////////////////////
+			
+			///TANKS/////
+			
+			if ( controls.getObject().position.z < 1140 && controls.getObject().position.z > 470  &&
+			controls.getObject().position.x > -1250 && controls.getObject().position.x < -280){
+			
+		    if (controls.getObject().position.z > 1100){ controls.getObject().position.z = 1140; }//
+			else if (controls.getObject().position.z < 490){ controls.getObject().position.z = 470 }
+			else if (controls.getObject().position.x < -1170){ controls.getObject().position.x = -1250 }
+			else if (controls.getObject().position.x > -340){ controls.getObject().position.x = -280 }
+			
+			}
+			
+			////////////////////////////////////////////////////
+			
+			/////Cart///////////////////////////////////////////
+			
+			
+			if ( controls.getObject().position.z < 1040 && controls.getObject().position.z > 930  &&
+			controls.getObject().position.x > 400 && controls.getObject().position.x < 620){
+			
+		    if (controls.getObject().position.z > 1020){ controls.getObject().position.z = 1040; }
+			else if (controls.getObject().position.z < 960){ controls.getObject().position.z = 930 }
+			else if (controls.getObject().position.x < 420){ controls.getObject().position.x = 400 }
+			else if (controls.getObject().position.x > 580){ controls.getObject().position.x = 620 }
+			
+			}
+			
+			
+			////////////////////////////////////////////
+			/////////////////////////////////////////////
+			
+			/////BAR///////////////////////////////////////////
+			
+			
+			if ( controls.getObject().position.z < 870 && controls.getObject().position.z > 450 &&
+			controls.getObject().position.x > 830 && controls.getObject().position.x < 1030){
+			
+		    if (controls.getObject().position.z > 850){ controls.getObject().position.z = 870; }
+			else if (controls.getObject().position.z < 500){ controls.getObject().position.z = 450 }
+			else if (controls.getObject().position.x < 850){ controls.getObject().position.x = 830 }
+			else if (controls.getObject().position.x > 1000){ controls.getObject().position.x = 1030 }
+			
+			}
+			
+			////////////////////////////////////////////
+			/////////////DOORHOUSE1////////////////////////////////
+			
+			if(controls.getObject().position.z > 200 && controls.getObject().position.z < 259 && controls.getObject().position.x > 320  && controls.getObject().position.x < 360){
+			
+			
+			document.getElementById('dialog').innerHTML ='[Press E]';
+			//setTimeout(function(){ document.getElementById('dialog').innerHTML =''; }, dialogtime);
+			
+			if ( Ekey == true ){
+			
+		   
+			
+			window.open ('HouseInside.html#Hub','_self',false);
+				
+		
+			}
+				
+			
+			
+			}
+			
+			
+			
+			}, 0.0025);
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			var raycaster = new THREE.Raycaster();
+			intersectionss = raycaster.intersectObjects( objects );
+		
+			
+            
+			function animate() {
+
+				requestAnimationFrame( animate );
+				
+				//console.log(controls.getObject().position.y);
+				
+				
+				if ( controlsEnabled ) {
+				
+					raycaster.set( camera.getWorldPosition(), camera.getWorldDirection() );
+					
+					var intersections = raycaster.intersectObjects( objects );
+		       
+
+					var isOnObject = intersections.length > 0;
+					
+					
+					
+					for ( var i = 0; i < intersections.length; i++ ) {
+
+	             	//getDistance(intersections[ i ].object, controls.getObject());
+					HitO = intersections[ i ].object;
+					
+	                }
+					
+					
+					
+					if ( intersections.length > 0 ){
+					
+					}else {
+					HitO = false;
+					}
+					
+					
+
+					var time = performance.now();
+					var delta = ( time - prevTime ) / 1000;
+					var speed = 4;
+					
+					//ratamahatta.update(delta);
+					
+					if ( Sprint == true ){ 
+					//console.log(speed);
+					speed = 6;
+					}
+					else{
+					
+					speed = 3.5;
+					}
+
+					velocity.x -= velocity.x * 10.0 * delta;
+					velocity.z -= velocity.z * 10.0 * delta;
+
+					velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
+
+					if ( moveForward ) velocity.z -= 400.0 * delta * speed;
+					if ( moveBackward ) velocity.z += 400.0 * delta * speed;
+
+					if ( moveLeft ) velocity.x -= 400.0 * delta * speed;
+					if ( moveRight ) velocity.x += 400.0 * delta * speed;
+					
+					
+                    
+					
+					
+					
+					
+					controls.getObject().translateX( velocity.x * delta );
+					controls.getObject().translateY( velocity.y * delta );
+					controls.getObject().translateZ( velocity.z * delta );
+
+					if ( controls.getObject().position.y < 50 ) {
+
+						velocity.y = 0;
+						controls.getObject().position.y = 50;
+
+						canJump = true;
+
+					}
+					
+					
+
+					prevTime = time;
+					
+					
+					
+
+				}
+				
+				
+
+				renderer.render( scene, camera );
+
+			}
+			
+            
+		</script>
+		<script src="Hud.js"></script>
+		<script src="NpcHUB.js"></script>
+		<script src="CombatHubE.js"></script>
+		
+        
+	</body>
+</html>
