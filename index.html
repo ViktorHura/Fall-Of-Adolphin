@@ -24,6 +24,20 @@
 	<body>
 		<script>
 		
+		var isChromium = window.chrome,
+    winNav = window.navigator,
+    vendorName = winNav.vendor,
+    isOpera = winNav.userAgent.indexOf("OPR") > -1,
+    isIEedge = winNav.userAgent.indexOf("Edge") > -1,
+    isIOSChrome = winNav.userAgent.match("CriOS");
+
+if(isIOSChrome){
+    alert('This site is primarily compatible with Chrome, things might not work');
+} else if(isChromium !== null && isChromium !== undefined && vendorName === "Google Inc." && isOpera == false && isIEedge == false) {
+  
+} else { 
+   alert('This site is primarily compatible with Chrome, things might not work');
+}
 		
 		if (window.location.protocol !== 'https:') {
         window.location = 'https://' + window.location.hostname + window.location.pathname + window.location.hash;
