@@ -98,10 +98,11 @@
 				
 			}
 			
-			
+			var dead = false;
 			var Combat = setInterval(function(){
 			
-		    if ( hp < 1 ){
+		    if ( hp < 1 && dead == false){
+			dead = true;
 			hp = 0;	
 			window.open('GameOver.html','_self',false)
 				

@@ -39,9 +39,7 @@
 				-webkit-box-orient: horizontal;
 				-moz-box-orient: horizontal;
 				box-orient: horizontal;
-                
-				
-				
+
 				-webkit-box-pack: center;
 				-moz-box-pack: center;
 				box-pack: center;
@@ -61,21 +59,22 @@
 
 		</style>
 	</head>
-	<body id='body'>
+	<body id='body' >
 		<script src="Three.js"></script>
 		<script src="Settings.js"></script>
+		
 		<script src="PointerLockControls.js"></script>
-		<script src="https://code.createjs.com/soundjs-0.6.2.min.js"></script></head>
-        
+        <script src="https://code.createjs.com/soundjs-0.6.2.min.js"></script></head>
+       
+
         
 		
 		<div id="blocker">
 
 			<div id="instructions">
-			   
+			
 				<img src="images/ResumeB.png"  id='Play' style="position:absolute;"	>
 				<img src="images/ExitB.png" onclick="window.open('index.html','_self',false)" id='Exit' style="position:absolute;"	>
-				
 				<span id='Info' style="font-size:40px;color: brown; visibility: hidden;">Loading...</span>
 				<br />
 				
@@ -92,18 +91,14 @@
 		<img src="images/Status.png" id="Status" style="position:absolute;">
 		<img src="images/Crosshair.png" id="Crosshair" style="position:absolute;">
 		
-		</div>
 		
-		<script>
-		var hp = 100;
-		var canJump = false;
-		var Sprint = false;
-		</script>
+		
+		</div>
 
 		<script>
 		    
 			
-			
+		  
 		    var loadingscreen = setInterval(function(){
 			
 			if (loaded == true){
@@ -112,10 +107,23 @@
 					}
 					
 			}, 250);
-			
+            
 			var cleared = false;
 			
-			var HitO = false;
+			var url = window.location.href;
+            var hash = url.substring(url.indexOf("#")+1);
+			
+			var ClearChat = setInterval(function(){
+			
+			if (document.getElementById('dialog').innerHTML == '[Press E]' && cleared == false ){
+			cleared = true;
+            setTimeout(function(){ document.getElementById('dialog').innerHTML = ''; cleared = false; }, dialogtime);			
+					
+			}
+					
+			}, 1);
+
+            		
 			
 			function getDistance(mesh1, mesh2) {
             var dx = mesh1.position.x - mesh2.position.x;
@@ -125,32 +133,32 @@
 			//console.log(distance);
            }
 			
-		    var ClearChat = setInterval(function(){
-			
-			if (document.getElementById('dialog').innerHTML == '[Press E]' && cleared == false ){
-			cleared = true;
-            setTimeout(function(){ document.getElementById('dialog').innerHTML = ''; cleared = false; }, dialogtime);			
-					
-			}
-					
-			}, 1);
-			
-
+				
+           
 			var camera, scene, renderer;
 			var geometry, material, mesh;
 			var controls;
+			var map;
+			var Ekey = false;
+			var objects = [];
+            var HitO;
+			var distance;
+		    
+			
+			
 			
 			var loaded = false;
 			
+			var hp = 100;
 
 			var objects = [];
-
-			var raycaster;
+			
+		
 
 			var blocker = document.getElementById( 'blocker' );
 			var instructions = document.getElementById( 'instructions' );
 
-				
+			// http://www.html5rocks.com/en/tutorials/pointerlock/intro/
 
 			var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
 
@@ -161,14 +169,13 @@
 				var pointerlockchange = function ( event ) {
 
 					if ( document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element ) {
-                        
+
 						if (loaded == true){
 						controlsEnabled = true;
 						controls.enabled = true;
 
 						blocker.style.display = 'none';
 						}
-						
 
 					} else {
 
@@ -214,7 +221,6 @@
 
 								document.removeEventListener( 'fullscreenchange', fullscreenchange );
 								document.removeEventListener( 'mozfullscreenchange', fullscreenchange );
-								
 
 								element.requestPointerLock();
 							}
@@ -251,8 +257,9 @@
 			var moveBackward = false;
 			var moveLeft = false;
 			var moveRight = false;
-			var Ekey = false;
-							
+			var Sprint = false;
+			var canJump = false;
+			
 
 			var prevTime = performance.now();
 			var velocity = new THREE.Vector3();
@@ -260,6 +267,7 @@
 			function init() {
 
 				camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+
 
 				scene = new THREE.Scene();
 				//scene.fog = new THREE.Fog( 0xffffff, 3000, 3000 );
@@ -270,7 +278,6 @@
 
 				controls = new THREE.PointerLockControls( camera );
 				scene.add( controls.getObject() );
-				
 
 				var onKeyDown = function ( event ) {
 
@@ -296,7 +303,9 @@
 							break;
 							
 						case 69: // E
+						    if (ecooldown == false){
 							Ekey = true;
+							}
 							break;
 							
 						
@@ -305,7 +314,7 @@
 							break;
 
 						case 32: // space
-							if ( canJump === true ) velocity.y += 350;
+							if ( canJump === true ) velocity.y += 400;
 							canJump = false;
 							break;
 
@@ -339,6 +348,8 @@
 						
 						case 69: // E
 							Ekey = false;
+							ecooldown = true;
+							setTimeout(function(){ ecooldown = false; }, 5000);
 							break;
 							
 							case 16: // shift
@@ -348,17 +359,18 @@
 					}
 
 				};
-
+				
+				
 				document.addEventListener( 'keydown', onKeyDown, false );
 				document.addEventListener( 'keyup', onKeyUp, false );
 
-				raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
-
+				
 				// floor
 
 				
+				// objects
 				
-
+				
                
 				
 				
@@ -369,28 +381,17 @@
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				document.body.appendChild( renderer.domElement );
 				
-                 
-				 
-				var url = window.location.href;
-                var hash = url.substring(url.indexOf("#")+1);
-                
-				//
+
+				
 				
 				var loader = new THREE.ObjectLoader();
-                 loader.load("House3.json",function ( obj ) {
+                 loader.load("scene (43).json",function ( obj ) {
 				 loaded = true;
+				 controls.getObject().rotation.y = 3.14;
+				 map = obj;
 				 
-                 scene.add( obj );
-				 
-				
-				 controls.getObject().position.z = 100;
-				 controls.getObject().position.x = 0;
-				 controls.getObject().rotation.y = 0;
-				 
-				 
-				 
-				 
-				 
+                 scene.add( map );
+				 objects.push(map);
                  });
 
 				window.addEventListener( 'resize', onWindowResize, false );
@@ -407,149 +408,33 @@
 			}
 			
 			
-			
+		
 			
 			var CollisionDetection = setInterval(function(){
 			
 			
-			//// WALlS////////////////////////////////
-			if (controls.getObject().position.x > 135){
-					controls.getObject().position.x = 135;	
-			}
-			
-			if (controls.getObject().position.x < -135){
-					controls.getObject().position.x = -135;
-			}
-			
-			if (controls.getObject().position.z > 135){
-					controls.getObject().position.z = 135;	
-			}
-			
-			if (controls.getObject().position.z < -135){
-					controls.getObject().position.z = -135;
-			}
-			/////////////////////////////////////////////
-			//BED/////////////////////////////////
-			
-			
-			if ( controls.getObject().position.z < -20 && controls.getObject().position.z > -150  &&
-		    controls.getObject().position.x > -150 && controls.getObject().position.x < -50){
-			
-		    if (controls.getObject().position.z > -40){ controls.getObject().position.z = -20; }
-			else if (controls.getObject().position.z < -130){ controls.getObject().position.z = -150 }
-			else if (controls.getObject().position.x < -130){ controls.getObject().position.x = -150; }
-			else if (controls.getObject().position.x > -70){ controls.getObject().position.x = -50 }
-			
-			}
-			/////////TABLE///////////////////////////////////
-			if ( controls.getObject().position.z < -30 && controls.getObject().position.z > -150  &&
-		    controls.getObject().position.x > 80 && controls.getObject().position.x < 150){
-			
-		    if (controls.getObject().position.z > -50){ controls.getObject().position.z = -30; }
-			else if (controls.getObject().position.z < -130){ controls.getObject().position.z = -150 }
-			else if (controls.getObject().position.x < 100){ controls.getObject().position.x = 80 }
-			else if (controls.getObject().position.x > 130){ controls.getObject().position.x = 150 }
-			
-			}
-			/////////FIRE///////////////////////////////////
-			if ( controls.getObject().position.z < 100 && controls.getObject().position.z > -30  &&
-		    controls.getObject().position.x > 80 && controls.getObject().position.x < 150){
-			
-		    if (controls.getObject().position.z > 80){ controls.getObject().position.z = 100; }
-			else if (controls.getObject().position.z < -50){ controls.getObject().position.z = -30 }
-			else if (controls.getObject().position.x < 100){ controls.getObject().position.x = 80 }
-			else if (controls.getObject().position.x > 130){ controls.getObject().position.x = 150 }
-			
-			}
-			
-			
-			}, 0.1);
-			
-			function CreateLadder(){
-			
-			geometry = new THREE.PlaneGeometry(40, 60);
- 
-            material = new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'images/Ladder.png' )} );
-			material.side = THREE.DoubleSide;
-			material.transparent  = true;
- 
-            mesh = new THREE.Mesh( geometry, material );
-			mesh.position.set(7, 40, -100);
- 
-            scene.add( mesh );
-			mesh.name = 'Ladder';
-			objects.push( mesh );
-			
-
-			}
-			
-			CreateLadder();
 			
 			
 			
-		  
-			
-			var gone = false;
-			
-			var Door = setInterval(function(){
-			/////////////Opening Door//////////////
+			}, 0.0025);
 			
 			
-			if(controls.getObject().position.z > 100 && controls.getObject().position.z < 150 && controls.getObject().position.x > -30  && controls.getObject().position.x < 30 ){
-			
-			
-			document.getElementById('dialog').innerHTML ='[Press E]';
-			
-			if ( Ekey == true){
-			
-		   
-			
-			window.open ('Hub.html#H3','_self',false);
-				
-		
-			}
-				
-			
-			
-			}
-			
-			if (HitO.name == "Ladder" && HitO != false){
-			
-			getDistance(controls.getObject(),HitO);
-			//console.log(distance);
-			if (distance < 100){
-			
-			document.getElementById('dialog').innerHTML ='[Press E]';
-		    if (Ekey == true && gone == false){
-		    document.getElementById('dialog').innerHTML ='';
-			gone = true;
-			window.open('H3Under.html','_self',false)
-			
-		  
-	          }
-			 }
-			}
-			
-			
-			
-			
-			}, 0.1);
-			
-			////////////////////////////
-			
-			////////////////////////////////////////////////////
 			var raycaster = new THREE.Raycaster();
 			intersectionss = raycaster.intersectObjects( objects );
+		
 			
 			
+			
+            
 			function animate() {
 
 				requestAnimationFrame( animate );
 				
-				//console.log(controls.getObject().position.z);
-				//console.log(controls.getObject().position.x);
+				//console.log(controls.getObject().position.y);
+				
 				
 				if ( controlsEnabled ) {
+				
 					raycaster.set( camera.getWorldPosition(), camera.getWorldDirection() );
 					
 					var intersections = raycaster.intersectObjects( objects );
@@ -557,9 +442,17 @@
 
 					var isOnObject = intersections.length > 0;
 					
+					
+				    
+					
+					
+					
+					
+					
+					
 					for ( var i = 0; i < intersections.length; i++ ) {
 
-	             	//getDistance(intersections[ i ].object, controls.getObject());
+	             	
 					HitO = intersections[ i ].object;
 					
 	                }
@@ -569,6 +462,8 @@
 					}else {
 					HitO = false;
 					}
+					
+					
 
 					var time = performance.now();
 					var delta = ( time - prevTime ) / 1000;
@@ -593,25 +488,21 @@
 
 					if ( moveLeft ) velocity.x -= 400.0 * delta * speed;
 					if ( moveRight ) velocity.x += 400.0 * delta * speed;
+					
+					
                     
 					
 					
-					if ( isOnObject === true ) {
-						velocity.y = Math.max( 0, velocity.y );
-
-						canJump = true;
-					}
 					
 					
-
 					controls.getObject().translateX( velocity.x * delta );
 					controls.getObject().translateY( velocity.y * delta );
 					controls.getObject().translateZ( velocity.z * delta );
 
-					if ( controls.getObject().position.y < 75 ) {
+					if ( controls.getObject().position.y < 50 ) {
 
 						velocity.y = 0;
-						controls.getObject().position.y = 75;
+						controls.getObject().position.y = 50;
 
 						canJump = true;
 
@@ -625,8 +516,9 @@
 					
 
 				}
-
 				
+				
+
 				renderer.render( scene, camera );
 
 			}
@@ -634,8 +526,8 @@
             
 		</script>
 		<script src="Hud.js"></script>
-		 <script src="SoundHouse.js"></script>
+	
+		
         
 	</body>
 </html>
-	
