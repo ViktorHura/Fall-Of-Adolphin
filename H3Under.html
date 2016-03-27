@@ -65,7 +65,7 @@
 		
 		<script src="PointerLockControls.js"></script>
         <script src="https://code.createjs.com/soundjs-0.6.2.min.js"></script></head>
-       
+       <script src="SoundH3Under.js"></script>
 
         
 		
@@ -96,7 +96,11 @@
 		</div>
 
 		<script>
-		    
+		    var surface = 'stone';
+			var pitchObject;
+			
+		    var IsHitting = false;
+			var ecooldown = false;
 			
 		  
 		    var loadingscreen = setInterval(function(){
@@ -110,8 +114,6 @@
             
 			var cleared = false;
 			
-			var url = window.location.href;
-            var hash = url.substring(url.indexOf("#")+1);
 			
 			var ClearChat = setInterval(function(){
 			
@@ -129,23 +131,34 @@
             var dx = mesh1.position.x - mesh2.position.x;
             var dy = mesh1.position.y - mesh2.position.y;
             var dz = mesh1.position.z - mesh2.position.z;
+			
             distance = Math.sqrt(dx*dx+dy*dy+dz*dz);
 			//console.log(distance);
+			
            }
 			
 				
-           
+         
 			var camera, scene, renderer;
 			var geometry, material, mesh;
 			var controls;
 			var map;
+			var opend = false;
 			var Ekey = false;
 			var objects = [];
             var HitO;
 			var distance;
-		    
+		    var arrow;
+			var Handle;
+			var Ladder;
+			var Door;
+			var Chair1;
+			var Chair2;
+			var Chair3;
 			
-			
+			var Chair4;
+			var Chair5;
+			var Chair6;
 			
 			var loaded = false;
 			
@@ -250,6 +263,8 @@
 
 			init();
 			animate();
+			
+			var InAir = false;
 
 			var controlsEnabled = false;
 
@@ -314,8 +329,13 @@
 							break;
 
 						case 32: // space
-							if ( canJump === true ) velocity.y += 400;
-							canJump = false;
+							if ( canJump === true ){
+							
+                           	canJump = false;						
+							velocity.y += 400;
+							}
+							
+							
 							break;
 
 					}
@@ -375,7 +395,7 @@
 				
 				
 				    
-				renderer = new THREE.WebGLRenderer();
+				renderer = new THREE.WebGLRenderer({ antialias: aa });
 				renderer.setClearColor( 0xffffff );
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
@@ -385,11 +405,53 @@
 				
 				
 				var loader = new THREE.ObjectLoader();
-                 loader.load("scene (43).json",function ( obj ) {
+                 loader.load("H3.json",function ( obj ) {
 				 loaded = true;
 				 controls.getObject().rotation.y = 3.14;
+				 controls.getObject().position.set(0,50,0);
 				 map = obj;
 				 
+				 textureChair = THREE.ImageUtils.loadTexture('images/Chair.png	'),
+				 Door = obj.getObjectByName( "Door", true );
+                 Chair1 = obj.getObjectByName( "Chair", true );
+                 Chair1.material.map = textureChair;
+				 
+				 Ladder = obj.getObjectByName( "Ladder", true );
+				 
+			     objects.push( Ladder );
+				 
+				 Handle = obj.getObjectByName( "Handle", true );
+				 
+				 
+			     objects.push( Handle );
+				 
+				 
+				 Chair2 = Chair1.clone();
+				 scene.add(Chair2);
+				 Chair3 = Chair1.clone();
+				 scene.add(Chair3); 
+				 
+				 Chair4 = Chair1.clone();
+				 scene.add(Chair4);
+				 Chair5 = Chair1.clone();
+				 scene.add(Chair5); 
+				 Chair6 = Chair1.clone();
+				 scene.add(Chair6);
+				
+				 
+				 Chair1.rotation.y = Math.random();
+			     Chair2.rotation.y = Math.random();
+				  Chair4.rotation.y = Math.random();
+			     Chair5.rotation.y = Math.random();
+				  Chair6.rotation.y = Math.random();
+				  
+				  Chair1.rotation.z = Math.random();
+			     Chair2.rotation.z = Math.random();
+				  Chair4.rotation.z = Math.random();
+			     Chair5.rotation.z = Math.random();
+				  Chair6.rotation.z = Math.random();
+			     
+				  
                  scene.add( map );
 				 objects.push(map);
                  });
@@ -407,10 +469,73 @@
 
 			}
 			
-			
+		
 		
 			
 			var CollisionDetection = setInterval(function(){
+			//Coridor
+			if ( controls.getObject().position.z > -100 && controls.getObject().position.z < 300  &&
+			controls.getObject().position.x < 100 && controls.getObject().position.x > -100){
+			
+		    if ( controls.getObject().position.z < -90 ){ controls.getObject().position.z = -90;}
+			else if (controls.getObject().position.x > 90){ controls.getObject().position.x = 90 }
+			else if (controls.getObject().position.x < -90){ controls.getObject().position.x = -90 }
+			
+			
+			}
+		   //middle room
+			if ( controls.getObject().position.z > 300 && controls.getObject().position.z < 700  &&
+			controls.getObject().position.x < 100 && controls.getObject().position.x > -100){
+			
+		    if ( controls.getObject().position.z > 680 ){ controls.getObject().position.z = 680;}
+		    if ( controls.getObject().position.z < 310 &&  controls.getObject().position.y > 150 ){ controls.getObject().position.z = 310;}
+			
+			
+			
+			}
+			//right room
+			if ( controls.getObject().position.z > 300 && controls.getObject().position.z < 700  &&
+			controls.getObject().position.x < -100 && controls.getObject().position.x > -300){
+			
+		    if ( controls.getObject().position.z > 680 ){ controls.getObject().position.z = 680;}
+			if ( controls.getObject().position.z < 320 ){ controls.getObject().position.z = 320;}
+			else if (controls.getObject().position.x < -280){ controls.getObject().position.x = -280 }
+			
+			
+			}
+			//left room
+			if ( controls.getObject().position.z > 300 && controls.getObject().position.z < 700  &&
+			controls.getObject().position.x > 100 && controls.getObject().position.x < 300){
+			
+		    if ( controls.getObject().position.z > 680 ){ controls.getObject().position.z = 680;}
+			if ( controls.getObject().position.z < 320 ){ controls.getObject().position.z = 320;}
+			else if (controls.getObject().position.x > 280){ controls.getObject().position.x = 280 }
+			
+			
+			}
+		   
+		   //dynamic collision
+			TestandPrevCol(controls.getObject(), BOXC, 45);
+			
+			TestandPrevCol(controls.getObject(), BOXC2, 45);
+			
+			TestandPrevCol(controls.getObject(), BOXC3, 45);
+			
+			TestandPrevCol(controls.getObject(), BOXC4, 45);
+			
+			TestandPrevCol(controls.getObject(), BOXC5, 45);
+			
+			TestandPrevCol(controls.getObject(), BOXC6, 45);
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 			
 			
 			
@@ -419,13 +544,183 @@
 			}, 0.0025);
 			
 			
-			var raycaster = new THREE.Raycaster();
-			intersectionss = raycaster.intersectObjects( objects );
+			
+			
+			var gone = false;
+			
+			
+			var Door = setInterval(function(){
+			/////////////Opening Door//////////////
+			
+			
+			if (HitO.name == "Ladder" && HitO != false){
+			
+			getDistance(controls.getObject(),HitO);
+			
+			if (distance < 100){
+			
+			document.getElementById('dialog').innerHTML ='[Press E]';
+		    if (Ekey == true && gone == false){
+		    document.getElementById('dialog').innerHTML ='';
+			gone = true;
+			window.open('House3.html#H3','_self',false)
+			
+		  
+	          }
+			 }
+			}
+			
+			if (HitO.name == "Handle" && HitO != false){
+			
+			getDistance(controls.getObject(),HitO);
+			
+			if (distance < 150 && opend == false){
+			
+			document.getElementById('dialog').innerHTML ='[Press E]';
+			
+		    if (Ekey == true && opend == false){
+		    document.getElementById('dialog').innerHTML ='';
+			opend = true;
+			
+			
+		  
+	          }
+			 }
+			}
+			
+			
+			if (opend == true){
+			
+			if (Handle.rotation.x > 0.9){
+			
+			Handle.rotation.x -= 0.1;
+			
+			
+			
+			
+			}else if (Handle.rotation.x < 1){
+			
+			Handle.position.y = 360;
+			Handle.position.z = 684;
+			
+			}
+			
+			if (Door.position.y > 0){
+			
+			Door.position.y -= 0.1;
+			
+			
+			
+			
+			}else if (Door.position.y < 102){
+			
+			
+			
+			}
+			
+			
+			
+			
+			}
+			
+			
+			
+			}, 0.1);
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			function TestandPrevCol(object, mesh, boxr){
+			
+			
+			
+			var colbr = boxr - 5;
+			var colbry = colbr + 50;
+			var acr = colbr * 8/10;
+			var acry = colbry * 8/10;
+			
+			if ( object.position.z > mesh.position.z - boxr && object.position.z < mesh.position.z + boxr  &&
+			object.position.x > mesh.position.x - boxr && object.position.x < mesh.position.x + boxr &&
+			object.position.y > mesh.position.y - boxr && object.position.y < mesh.position.y + colbry){
+			
+		   
+			if (object.position.z > mesh.position.z - colbr && object.position.z < mesh.position.z - acr && object.position.y < mesh.position.y + boxr){ object.position.z = mesh.position.z - colbr;} 	
+		    else if (object.position.z < mesh.position.z + colbr && object.position.z > mesh.position.z + acr && object.position.y < mesh.position.y + boxr){ object.position.z = mesh.position.z + colbr;}
+			
+			else if (object.position.x > mesh.position.x - colbr && object.position.x < mesh.position.x - acr && object.position.y < mesh.position.y + boxr){ object.position.x = mesh.position.x - colbr;} 	
+		    else if (object.position.x < mesh.position.x + colbr && object.position.x > mesh.position.x + acr && object.position.y < mesh.position.y + boxr){ object.position.x = mesh.position.x + colbr;}
+			
+			else if (object.position.y > mesh.position.y - colbr && object.position.y < mesh.position.y - acr ){ velocity.y = 0; } 	
+		    else if (object.position.y < mesh.position.y + colbry && object.position.y > mesh.position.y + acry){ velocity.y = 0; InAir = false; object.position.y = mesh.position.y + boxr + 45; canJump = true; }
+			
+			surface = 'metal';
+			
+			}
+			else {
+			InAir = true;
+			}
+			
+			
+			
+			}
+			
+			
+			
+			////physics/////
 		
 			
+			///////physics////////
+		
 			
+			var seeoutline = false;
 			
-            
+			geometryB = new THREE.BoxGeometry( 60, 60, 60 );
+			materialB = new THREE.MeshPhongMaterial( { specular: 0xffffff, shading: THREE.FlatShading} );
+
+			var BOXC = new THREE.Mesh( geometryB, materialB );
+			BOXC.position.set(-200,30,430);
+			scene.add( BOXC );
+			BOXC.visible = seeoutline;
+
+			var BOXC2 = new THREE.Mesh( geometryB, materialB );
+			BOXC2.position.set(-100,80,550);
+			scene.add( BOXC2 );
+			BOXC2.visible = seeoutline;
+                    
+		    var BOXC3 = new THREE.Mesh( geometryB, materialB );
+			BOXC3.position.set(100,150,550);
+			scene.add( BOXC3 );	
+			BOXC3.visible = seeoutline;
+			
+			var BOXC4 = new THREE.Mesh( geometryB, materialB );
+			BOXC4.position.set(200,180,400);
+			scene.add( BOXC4 );	
+			BOXC4.visible = seeoutline;
+			
+			var BOXC5 = new THREE.Mesh( geometryB, materialB );
+			BOXC5.position.set(0,220,400);
+			scene.add( BOXC5 );	
+			BOXC5.visible = seeoutline;
+			
+			var BOXC6 = new THREE.Mesh( geometryB, materialB );
+			BOXC6.position.set(-100,250,550);
+			scene.add( BOXC6 );	
+			BOXC6.visible = seeoutline;
+                    
+                    
+			var raycaster = new THREE.Raycaster();
+			intersectionss = raycaster.intersectObjects( objects );
+			
+			var left = false;
+           
+			
 			function animate() {
 
 				requestAnimationFrame( animate );
@@ -435,6 +730,7 @@
 				
 				if ( controlsEnabled ) {
 				
+					
 					raycaster.set( camera.getWorldPosition(), camera.getWorldDirection() );
 					
 					var intersections = raycaster.intersectObjects( objects );
@@ -443,16 +739,9 @@
 					var isOnObject = intersections.length > 0;
 					
 					
-				    
-					
-					
-					
-					
-					
-					
 					for ( var i = 0; i < intersections.length; i++ ) {
 
-	             	
+	             	//getDistance(intersections[ i ].object, controls.getObject());
 					HitO = intersections[ i ].object;
 					
 	                }
@@ -462,6 +751,59 @@
 					}else {
 					HitO = false;
 					}
+					
+				    Chair1.position.y = BOXC.position.y;
+				    Chair1.position.x = BOXC.position.x;
+			        Chair1.position.z = BOXC.position.z;
+					
+					
+					Chair2.position.y = BOXC2.position.y;
+				    Chair2.position.x = BOXC2.position.x;
+			        Chair2.position.z = BOXC2.position.z;
+					
+					
+					Chair3.position.y = BOXC3.position.y;
+				    Chair3.position.x = BOXC3.position.x;
+			        Chair3.position.z = BOXC3.position.z;
+					
+					Chair4.position.y = BOXC4.position.y;
+				    Chair4.position.x = BOXC4.position.x;
+			        Chair4.position.z = BOXC4.position.z;
+					
+					
+					Chair5.position.y = BOXC5.position.y;
+				    Chair5.position.x = BOXC5.position.x;
+			        Chair5.position.z = BOXC5.position.z;
+					
+					
+					Chair6.position.y = BOXC6.position.y;
+				    Chair6.position.x = BOXC6.position.x;
+			        Chair6.position.z = BOXC6.position.z;
+					
+					Chair3.rotation.x += 0.05;
+					Chair3.rotation.y += 0.05;
+					Chair3.rotation.z += 0.05;
+					
+				
+					if (BOXC3.position.x < 250 && left == false ){
+                  	
+		             BOXC3.position.x += 1;	
+			
+		            }
+					else if (BOXC3.position.x > 150){
+					left = true;
+					}
+					
+					if (BOXC3.position.x > 20 && left == true ){
+                  	
+		             BOXC3.position.x -= 1;	
+			
+		            }
+					else if (BOXC3.position.x < 22){
+					left = false;
+					}
+		
+		          
 					
 					
 
@@ -481,8 +823,17 @@
 					velocity.x -= velocity.x * 10.0 * delta;
 					velocity.z -= velocity.z * 10.0 * delta;
 
+					
+					
+					if ( InAir == true ) {
 					velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
-
+                    
+					}
+					else{
+					
+					}
+					
+  
 					if ( moveForward ) velocity.z -= 400.0 * delta * speed;
 					if ( moveBackward ) velocity.z += 400.0 * delta * speed;
 
@@ -491,6 +842,10 @@
 					
 					
                     
+					if (velocity.y > 10){
+					InAir = true;
+					
+					}
 					
 					
 					
@@ -499,16 +854,27 @@
 					controls.getObject().translateY( velocity.y * delta );
 					controls.getObject().translateZ( velocity.z * delta );
 
-					if ( controls.getObject().position.y < 50 ) {
+					if ( controls.getObject().position.y < 50 || controls.getObject().position.y == 50 ) {
 
 						velocity.y = 0;
 						controls.getObject().position.y = 50;
 
 						canJump = true;
+						surface = 'stone';
+						InAir = false;
 
 					}
 					
+					if ( controls.getObject().position.y > 370 ) {
+
+						velocity.y = 0;
+						
+
+						
+
+					}
 					
+				
 
 					prevTime = time;
 					
@@ -527,7 +893,6 @@
 		</script>
 		<script src="Hud.js"></script>
 	
-		
         
 	</body>
 </html>

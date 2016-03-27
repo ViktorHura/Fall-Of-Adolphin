@@ -133,8 +133,10 @@
             var dx = mesh1.position.x - mesh2.position.x;
             var dy = mesh1.position.y - mesh2.position.y;
             var dz = mesh1.position.z - mesh2.position.z;
+			
             distance = Math.sqrt(dx*dx+dy*dy+dz*dz);
 			//console.log(distance);
+			
            }
 			
 				
@@ -379,7 +381,7 @@
 				
 				
 				    
-				renderer = new THREE.WebGLRenderer();
+				renderer = new THREE.WebGLRenderer({ antialias: aa });
 				renderer.setClearColor( 0xffffff );
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );

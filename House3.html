@@ -363,7 +363,7 @@
 				
 				
 				    
-				renderer = new THREE.WebGLRenderer();
+				renderer = new THREE.WebGLRenderer({ antialias: aa });
 				renderer.setClearColor( 0xffffff );
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
@@ -379,13 +379,19 @@
 				var loader = new THREE.ObjectLoader();
                  loader.load("House3.json",function ( obj ) {
 				 loaded = true;
-				 
-                 scene.add( obj );
-				 
-				
+				 if (hash == 'H3'){ 
+				 controls.getObject().position.set(0,50,-80); 
+				  controls.getObject().rotation.y = 3.14;
+				 }
+				 else{
 				 controls.getObject().position.z = 100;
 				 controls.getObject().position.x = 0;
 				 controls.getObject().rotation.y = 0;
+				 }
+                 scene.add( obj );
+				 
+				
+				 
 				 
 				 
 				 

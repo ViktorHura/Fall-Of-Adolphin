@@ -1,108 +1,9 @@
-<html>
-	<head>
-		<meta charset="utf-8">
-		<title>Fall of Adolphin</title>
-		<style>
-			html, body {
-				width: 100%;
-				height: 100%;
-			}
-
-			body {
-				background-color: #ffffff;
-				margin: 0;
-				overflow: hidden;
-				font-family: arial;
-			}
+  
 			
-			
-			#blocker {
-
-				position: absolute;
-
-				width: 100%;
-				height: 100%;
-
-				
-
-			}
-
-			#instructions {
-
-				width: 100%;
-				height: 100%;
-
-				display: -webkit-box;
-				display: -moz-box;
-				display: box;
-
-				-webkit-box-orient: horizontal;
-				-moz-box-orient: horizontal;
-				box-orient: horizontal;
-                
-				
-				
-				-webkit-box-pack: center;
-				-moz-box-pack: center;
-				box-pack: center;
-
-				-webkit-box-align: center;
-				-moz-box-align: center;
-				box-align: center;
-
-				color: #ffffff;
-				text-align: center;
-
-				cursor: pointer;
-
-			}
-			
-            
-
-		</style>
-	</head>
-	<body id='body'>
-		<script src="Three.js"></script>
-		<script src="Settings.js"></script>
-		<script src="PointerLockControls.js"></script>
-		<script src="https://code.createjs.com/soundjs-0.6.2.min.js"></script></head>
-        <script src="SoundHouse.js"></script>
-        
-		
-		<div id="blocker">
-
-			<div id="instructions">
-			   
-				<img src="images/ResumeB.png"  id='Play' style="position:absolute;"	>
-				<img src="images/ExitB.png" onclick="window.open('index.html','_self',false)" id='Exit' style="position:absolute;"	>
-				
-				<span id='Info' style="font-size:40px;color: brown; visibility: hidden;">Loading...</span>
-				<br />
-				
-			</div>
-
-		</div>
-		</div>
-		
-		<div id="HUD" style="position:absolute;">
-		
-		<span id="dialog"  style="position:absolute;font-size:150%;width: 650px;color: brown;"></span>
-		<img src="images/Dialog.png" id="dialogBg" style="position:absolute;"	>
-		<span id="health"  style="position:absolute;font-size:100%;width: 300px;color: Green;">100%</span>
-		<img src="images/Status.png" id="Status" style="position:absolute;">
-		<img src="images/Crosshair.png" id="Crosshair" style="position:absolute;">
-		
-		</div>
-		
-		<script>
-		var hp = 100;
-		</script>
-
-		<script>
-		    
-			
-			
+			var tookvodka = false;
 		    var loadingscreen = setInterval(function(){
+			var distance;
+			var HitO;
 			
 			if (loaded == true){
 					document.getElementById('Info').innerHTML ='Click to Play';
@@ -111,7 +12,27 @@
 					
 			}, 250);
 			
-		
+			
+			function getDistance(mesh1, mesh2) {
+            var dx = mesh1.position.x - mesh2.position.x;
+            var dy = mesh1.position.y - mesh2.position.y;
+            var dz = mesh1.position.z - mesh2.position.z;
+            distance = Math.sqrt(dx*dx+dy*dy+dz*dz);
+			//console.log(distance);
+           }
+			
+			
+			var cleared = false;
+			
+		    var ClearChat = setInterval(function(){
+			
+			if (document.getElementById('dialog').innerHTML == '[Press E]' && cleared == false ){
+			cleared = true;
+            setTimeout(function(){ document.getElementById('dialog').innerHTML = ''; cleared = false; }, dialogtime);			
+					
+			}
+					
+			}, 1);
 			
 
 			var camera, scene, renderer;
@@ -119,9 +40,7 @@
 			var controls;
 			
 			var loaded = false;
-			
-			var talked = false;
-			var leave = false;
+			var cantv = false;
 
 			var objects = [];
 
@@ -231,8 +150,6 @@
 			var moveBackward = false;
 			var moveLeft = false;
 			var moveRight = false;
-			var Sprint = false;
-			var canJump = false;
 			var Ekey = false;
 							
 
@@ -279,6 +196,7 @@
 							
 						case 69: // E
 							Ekey = true;
+							
 							break;
 							
 						
@@ -345,7 +263,7 @@
 				
 				
 				    
-				renderer = new THREE.WebGLRenderer({ antialias: aa });
+				renderer = new THREE.WebGLRenderer();
 				renderer.setClearColor( 0xffffff );
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
@@ -363,19 +281,14 @@
 				 loaded = true;
                  scene.add( obj );
 				 
-				 if (hash == 'Hub'){
+				
 				 controls.getObject().position.z = 100;
 				 controls.getObject().position.x = 0;
 				 controls.getObject().rotation.y = 0;
-				 talked = true;
-				 leave = true;
 				 
-				 }
-				 else{
-				 controls.getObject().position.z = -100;
-				 controls.getObject().rotation.y = 3.14;
-				 controls.getObject().position.x = 0;
-				 }
+				 
+				 
+				 
 				 
                  });
 
@@ -391,6 +304,120 @@
 				renderer.setSize( window.innerWidth, window.innerHeight );
 
 			}
+			
+			
+			
+			
+			
+			
+			var geometry1NPC = new THREE.PlaneGeometry( 90, 65, 1, 1 );
+			var geometry2NPC = new THREE.PlaneGeometry( 90, 65, 1, 1 );
+			
+			geometry2NPC.applyMatrix( new THREE.Matrix4().makeRotationY( Math.PI ) );
+			
+			var textureFrontNPC = new THREE.ImageUtils.loadTexture('images/Rasta.png' );      
+            var textureBackNPC = new THREE.ImageUtils.loadTexture('images/RastaBack.png' );
+
+                // material
+             var material1NPC = new THREE.MeshBasicMaterial( { color: 0xffffff, map: textureBackNPC } );
+			 material1NPC.transparent = true;
+             var material2NPC = new THREE.MeshBasicMaterial( { color: 0xffffff, map: textureFrontNPC } );
+			 material2NPC.transparent = true;
+
+              // Npc
+             var npc = new THREE.Object3D();
+             scene.add( npc );
+
+                // mesh
+             mesh1 = new THREE.Mesh( geometry1NPC, material1NPC );
+            npc.add( mesh1 );
+             mesh2 = new THREE.Mesh( geometry2NPC, material2NPC );
+            npc.add( mesh2 );
+			npc.position.y = 30;
+			npc.position.z = -100;
+			npc.position.x = 30;
+			
+			////invisible object for getting the y rotation///
+			
+			
+			var rotObj1 = new THREE.Mesh( geometry1NPC, material2NPC );
+			rotObj1.position.y = 32;
+			rotObj1.position.z = -100;
+			rotObj1.position.x = 30;
+			rotObj1.visible = false;
+			scene.add(rotObj1);
+			
+			
+			
+			
+			var progression = 0;
+			var playeds = 0;
+		    
+			
+			var ScriptedEvents = setInterval(function(){
+			
+		    ////// Talk to Rasta/////
+		    
+			if ( controls.getObject().position.z < 0 && controls.getObject().position.z < 20 && progression == 0 ){
+			progression = 1;
+			document.getElementById('dialog').innerHTML ='Hey psst, come closer.' + '<br>'+'[Press E]';
+			if(playeds == 0){
+			createjs.Sound.play("R1" , {volume: fxvolume });
+			playeds = 1;
+			}
+			}
+			else if (progression == 1 && Ekey == true){
+			progression = 2;
+			setTimeout(function(){ progression = 3;}, 1000);		
+			document.getElementById('dialog').innerHTML ="So you want to get inside the bunker huh? I left my stuff at the bar, but they won't let me inside. If you help me I can help you as well." + '<br>'+'[Press E]';
+			if(playeds == 1){
+			createjs.Sound.play("R2" , {volume: fxvolume });
+			playeds = 2;
+	        
+			}
+			}
+			
+			else if (progression == 3 && Ekey == true){
+			progression = 4;
+			setTimeout(function(){ progression = 5;}, 1000);	
+			document.getElementById('dialog').innerHTML ="Ok, deal. First, take the Vodka. You can't get inside without it. Then find the bartender. Tell him 'Rasta' needs the stuff. Then bring the stuff back to me." + '<br>'+'[Press E]';
+			if(playeds == 2){
+			createjs.Sound.play("R3" , {volume: fxvolume });
+			playeds = 3;
+			}
+			}
+			
+			
+			else if (progression == 5 && Ekey == true){
+			progression = 6;
+			cantv = true;
+			document.getElementById('dialog').innerHTML ="Good luck, señor Gunter.";
+			if(playeds == 3){
+			createjs.Sound.play("R4" , {volume: fxvolume });
+			playeds = 4;
+			}
+			
+			}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			}, 0.1);
+			
+			
+			
+			
+			
+			
+			
+			
 			
 			
 			
@@ -452,116 +479,35 @@
 			}, 0.1);
 			
 			
-		   ///////////////////////////NPC///////////////////////////////////////////////////
-		   ////////////////////////////////////////////////////////////////////////////////
-		   ////////////////////////////////////////////////////////////////////////////
-		   
-			var geometry1NPC = new THREE.PlaneGeometry( 65, 90, 1, 1 );
-			var geometry2NPC = new THREE.PlaneGeometry( 65, 90, 1, 1 );
-			
-			geometry2NPC.applyMatrix( new THREE.Matrix4().makeRotationY( Math.PI ) );
-			
-			var textureFrontNPC = new THREE.ImageUtils.loadTexture('images/SovjetPenguin.png' );      
-            var textureBackNPC = new THREE.ImageUtils.loadTexture('images/SovjetPenguinBack.png' );
-
-                // material
-             var material1NPC = new THREE.MeshBasicMaterial( { color: 0xffffff, map: textureBackNPC } );
-			 material1NPC.transparent = true;
-             var material2NPC = new THREE.MeshBasicMaterial( { color: 0xffffff, map: textureFrontNPC } );
-			 material2NPC.transparent = true;
-
-              // Npc
-             var npc = new THREE.Object3D();
-             scene.add( npc );
-
-                // mesh
-             mesh1 = new THREE.Mesh( geometry1NPC, material1NPC );
-            npc.add( mesh1 );
-             mesh2 = new THREE.Mesh( geometry2NPC, material2NPC );
-            npc.add( mesh2 );
-			npc.position.y = 45;
-			npc.position.z = 100;
-			npc.position.x = -100;
-			
-			////invisible object for getting the y rotation///
-			
-			
-			var rotObj1 = new THREE.Mesh( geometry1NPC, material2NPC );
-			rotObj1.position.y = 35;
-			rotObj1.position.z = 100;
-			rotObj1.position.x = -100;
-			rotObj1.visible = false;
-			scene.add(rotObj1);
-			
-			
-			
-			
-			
-            /////////////////////////////////////////////////////////////////////////////
-			/////////////////////////////////////////////////////////////////////////////
-			//////////////////////////////////////////////////////////////////////////////
-			
-			/// //////Scripted Events //////////
-			
-			var pressedonce = false;
-			var playeds = false;
-			
-			var ScriptedEvents = setInterval(function(){
-			
-		    ////// Talk to General/////
-		    
-			if ( controls.getObject().position.z > -20 && controls.getObject().position.z < 20 && talked == false ){
-			
-			document.getElementById('dialog').innerHTML ='Hello, Igor. We managed to sneak you in the village.' + '<br>'+'[Press E]';
-			if(playeds == false){
-			createjs.Sound.play("Penguin1" , {volume: fxvolume });
-			playeds = true;
-			}
-			///
-			var TestForE = setInterval(function(){
-			
-			if ( Ekey == true && pressedonce == false ){
-			
-		    pressedonce = true;
-			
-			if(playeds == true){
-			createjs.Sound.play("Penguin2" , {volume: fxvolume });
-			playeds = 0;
-			}
-			
-			document.getElementById('dialog').innerHTML ='You must gather information about the bunker and return before the sun falls, good luck my brother.';
-		    talked = true;
-			
-			setTimeout( function(){leave = true;}, 1000 );
-			
-			}
-			}, 0.1);
+		  
 			///
 			
-			}
+			
+			var Door = setInterval(function(){
 			/////////////Opening Door//////////////
 			
 			
-			if(controls.getObject().position.z > 100 && controls.getObject().position.z < 150 && controls.getObject().position.x > -30  && controls.getObject().position.x < 30 && talked == true ){
+			if(controls.getObject().position.z > 100 && controls.getObject().position.z < 150 && controls.getObject().position.x > -30  && controls.getObject().position.x < 30 ){
 			
 			
 			document.getElementById('dialog').innerHTML ='[Press E]';
 			
-			if ( Ekey == true && leave == true){
+			if ( Ekey == true){
 			
-		   
+		    if (tookvodka == false){
 			
-			window.open ('Hub.html','_self',false);
-				
+			window.open ('Hub.html#H4','_self',false);
+			 }else if (tookvodka == true){
+			 window.open ('Hub.html#Vodka','_self',false);
+			 
+			 }
 		
 			}
 				
 			
 			
 			}
-			else if ( talked == true ){
-			document.getElementById('dialog').innerHTML ='You must gather information about the bunker and return before the sun falls, good luck my brother.';
-			}
+			
 		    
 			////////////////////////////
 			////////////////////////////
@@ -573,6 +519,47 @@
 			////////////////////////////////////////////////////
 			
 			
+			var geoVodka = new THREE.PlaneGeometry( 10, 30, 1, 1 );
+            var matVodka = new THREE.MeshBasicMaterial( { color: 0xffffff, map: new THREE.ImageUtils.loadTexture('images/Vodka.png') ,depthWrite: false} );  
+			
+			 matVodka.transparent = true;
+			 matVodka.side = THREE.DoubleSide;
+            var Vodka = new THREE.Mesh( geoVodka, matVodka );
+			Vodka.position.set(120,55,-60);
+			Vodka.rotation.y = 2.31;
+			
+			Vodka.name = 'Vodka';
+			objects.push( Vodka );
+			
+            scene.add( Vodka );
+			
+			var VodkaLoop = setInterval(function(){
+			
+			
+	
+	
+	        if( HitO.name == 'Vodka'){
+	        getDistance(npc, controls.getObject());	
+	        if (distance < 100 && cantv == true){
+			document.getElementById('dialog').innerHTML ='[Press E]';
+		    if (Ekey == true){
+		    document.getElementById('dialog').innerHTML ='';
+			objects.pop();
+			scene.remove(Vodka);
+		    tookvodka = true;
+		  
+	          }
+	         }
+	        }
+			
+			
+			
+			}, 0.1);
+			
+			var raycaster = new THREE.Raycaster();
+			intersectionss = raycaster.intersectObjects( objects );
+			
+			
 			
 			function animate() {
 
@@ -582,12 +569,27 @@
 				//console.log(controls.getObject().position.x);
 				
 				if ( controlsEnabled ) {
-					raycaster.ray.origin.copy( controls.getObject().position );
-					raycaster.ray.origin.y -= 10;
-
+					raycaster.set( camera.getWorldPosition(), camera.getWorldDirection() );
+					
 					var intersections = raycaster.intersectObjects( objects );
+		       
 
 					var isOnObject = intersections.length > 0;
+					
+					
+					
+					for ( var i = 0; i < intersections.length; i++ ) {
+
+	             	//getDistance(intersections[ i ].object, controls.getObject());
+					HitO = intersections[ i ].object;
+					
+	                }
+					
+					if ( intersections.length > 0 ){
+					
+					}else {
+					HitO = false;
+					}
 
 					var time = performance.now();
 					var delta = ( time - prevTime ) / 1000;
@@ -622,8 +624,26 @@
 					}
 					
 					rotObj1.lookAt( controls.getObject().position );
-					npc.rotation.y = -1 * rotObj1.rotation.y;
-
+					npc.rotation.y = rotObj1.rotation.y + 3.14;
+					
+					if (sessionStorage.getItem("Vodka") == 'true'){ 
+					
+					progression = 6;
+			        cantv = false;
+			        document.getElementById('dialog').innerHTML ="Good luck, señor Gunter.";
+					
+					
+				    objects.pop();
+			        scene.remove(Vodka);
+		            tookvodka = true;
+					
+					
+					}
+					
+					
+                     
+				
+					 
 					controls.getObject().translateX( velocity.x * delta );
 					controls.getObject().translateY( velocity.y * delta );
 					controls.getObject().translateZ( velocity.z * delta );
@@ -652,8 +672,3 @@
 			}
 			
             
-		</script>
-		<script src="Hud.js"></script>
-        
-	</body>
-</html>

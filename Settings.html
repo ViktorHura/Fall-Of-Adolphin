@@ -18,6 +18,7 @@
 	  
       <font size= '5' color="dark green">Mouse Sensitivity: </font> <input type="text" name="mouss" value="15">  <font color="0x009900"> - How fast/slow you can look around</font><br><br>
 	  <font size= '5' color="dark green">Effects Volume: </font> <input type="text" name="vol" value="1">  <font color="0x009900"> - How loud the effects volume is.</font><br><br>
+	  <font size= '5' color="dark green">Antialiasing: </font> <input type="text" name="aa" value="0" readonly></input> <input type="Button" onclick="x.aa.value = true" value="True"> <input type="Button" onclick="x.aa.value = false" value="False"> <font color="0x009900"> - Makes everything look smooth.</font><br><br>
 	  
 	  
      <input type="Button" onclick="Save()" value="Save">
@@ -55,19 +56,23 @@
 		x.dialogt.value = document.cookie.replace(/(?:(?:^|.*;\s*)dialogtime\s*\=\s*([^;]*).*$)|^.*$/, "$1") / 1000;
 		x.mouss.value = document.cookie.replace(/(?:(?:^|.*;\s*)sensitivity\s*\=\s*([^;]*).*$)|^.*$/, "$1") * 10000;
 		x.vol.value = document.cookie.replace(/(?:(?:^|.*;\s*)volume\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+		x.aa.value = document.cookie.replace(/(?:(?:^|.*;\s*)aa\s*\=\s*([^;]*).*$)|^.*$/, "$1");
 		
         var sensitivity;
 		var dialogtime;
 		var volume;
+		var aa;
 		
 		function Save(){
 		dialogtime = x.dialogt.value * 1000;
 		sensitivity = x.mouss.value / 10000;
 		volume = x.vol.value;
+		aa = x.aa.value;
 		
 		document.cookie="dialogtime=" + dialogtime;
 		document.cookie="sensitivity=" + sensitivity;
 		document.cookie="volume=" + volume;
+		document.cookie="aa=" + aa;
 
         
 		}
