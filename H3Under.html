@@ -101,7 +101,7 @@
 			
 		    var IsHitting = false;
 			var ecooldown = false;
-			
+			var tookGun = false;
 		  
 		    var loadingscreen = setInterval(function(){
 			
@@ -155,6 +155,7 @@
 			var Chair1;
 			var Chair2;
 			var Chair3;
+			var gun;
 			
 			var Chair4;
 			var Chair5;
@@ -421,10 +422,10 @@
 			     objects.push( Ladder );
 				 
 				 Handle = obj.getObjectByName( "Handle", true );
-				 
+				 gun = obj.getObjectByName( "gun", true );
 				 
 			     objects.push( Handle );
-				 
+				 objects.push( gun );
 				 
 				 Chair2 = Chair1.clone();
 				 scene.add(Chair2);
@@ -470,7 +471,7 @@
 			}
 			
 		
-		
+		    
 			
 			var CollisionDetection = setInterval(function(){
 			//Coridor
@@ -483,8 +484,14 @@
 			
 			
 			}
-		   //middle room
-			if ( controls.getObject().position.z > 300 && controls.getObject().position.z < 700  &&
+				//upper room
+			if ( controls.getObject().position.z > 670 && controls.getObject().position.z < 1050  &&
+			controls.getObject().position.x > -18 && controls.getObject().position.x < 100 && controls.getObject().position.y > 200){
+			
+			canJump = false;
+			
+			}
+			else if ( controls.getObject().position.z > 300 && controls.getObject().position.z < 700  &&
 			controls.getObject().position.x < 100 && controls.getObject().position.x > -100){
 			
 		    if ( controls.getObject().position.z > 680 ){ controls.getObject().position.z = 680;}
@@ -513,6 +520,8 @@
 			
 			
 			}
+			
+		
 		   
 		   //dynamic collision
 			TestandPrevCol(controls.getObject(), BOXC, 45);
@@ -527,12 +536,16 @@
 			
 			TestandPrevCol(controls.getObject(), BOXC6, 45);
 			
+			TestandPrevCol(controls.getObject(), BOXC7, 210);
+			TestandPrevCol(controls.getObject(), BOXC8, 210);
 			
+			TestandPrevCol(controls.getObject(), BOXC9, 210);
+			TestandPrevCol(controls.getObject(), BOXC10, 210);
 			
+			TestandPrevCol(controls.getObject(), BOXC11, 210);
+			TestandPrevCol(controls.getObject(), BOXC12, 210);
 			
-			
-			
-			
+			TestandPrevCol(controls.getObject(), BOXC13, 210);
 			
 			
 			
@@ -625,6 +638,33 @@
 			
 			
 			
+			
+			
+			
+			
+			
+			if (HitO.name == "gun" && HitO != false){
+			
+			getDistance(controls.getObject(),HitO);
+			
+			if (distance < 100 && tookGun == false){
+			
+			document.getElementById('dialog').innerHTML ='[Press E]';
+			
+		    if (Ekey == true){
+		    document.getElementById('dialog').innerHTML ='';
+			
+			tookGun = true;
+			
+			
+		  
+	          }
+			 }
+			}
+			
+			
+			
+			
 			}, 0.1);
 			
 			
@@ -713,13 +753,51 @@
 			BOXC6.position.set(-100,250,550);
 			scene.add( BOXC6 );	
 			BOXC6.visible = seeoutline;
+			
+			var BOXC7 = new THREE.Mesh( new THREE.BoxGeometry( 210, 210, 210 ), materialB );
+			BOXC7.position.set(50,30,860);
+			scene.add( BOXC7 );	
+			BOXC7.visible = seeoutline;
+			
+			var BOXC8 = new THREE.Mesh( new THREE.BoxGeometry( 210, 210, 210 ), materialB );
+			BOXC8.position.set(50,30,1050);
+			scene.add( BOXC8 );	
+			BOXC8.visible = seeoutline;
+			
+			
+			var BOXC9 = new THREE.Mesh( new THREE.BoxGeometry( 210, 210, 210 ), materialB );
+			BOXC9.position.set(-220,300,860);
+			scene.add( BOXC9 );	
+			BOXC9.visible = seeoutline;
+			
+			var BOXC10 = new THREE.Mesh( new THREE.BoxGeometry( 210, 210, 210 ), materialB );
+			BOXC10.position.set(-220,300,1050);
+			scene.add( BOXC10 );	
+			BOXC10.visible = seeoutline;
+			
+			var BOXC11 = new THREE.Mesh( new THREE.BoxGeometry( 210, 210, 210 ), materialB );
+			BOXC11.position.set(300,300,860);
+			scene.add( BOXC11 );	
+			BOXC11.visible = seeoutline;
+			
+			var BOXC12 = new THREE.Mesh( new THREE.BoxGeometry( 210, 210, 210 ), materialB );
+			BOXC12.position.set(300,300,1050);
+			scene.add( BOXC12 );	
+			BOXC12.visible = seeoutline;
+			
+			var BOXC13 = new THREE.Mesh( new THREE.BoxGeometry( 210, 210, 210 ), materialB );
+			BOXC13.position.set(50,300,1250);
+			scene.add( BOXC13 );	
+			BOXC13.visible = seeoutline;
+			
+		
                     
                     
 			var raycaster = new THREE.Raycaster();
 			intersectionss = raycaster.intersectObjects( objects );
 			
 			var left = false;
-           
+            var up = true;
 			
 			function animate() {
 
@@ -787,7 +865,7 @@
 				
 					if (BOXC3.position.x < 250 && left == false ){
                   	
-		             BOXC3.position.x += 1;	
+		             BOXC3.position.x += 0.5;	
 			
 		            }
 					else if (BOXC3.position.x > 150){
@@ -796,14 +874,32 @@
 					
 					if (BOXC3.position.x > 20 && left == true ){
                   	
-		             BOXC3.position.x -= 1;	
+		             BOXC3.position.x -= 0.5;	
 			
 		            }
 					else if (BOXC3.position.x < 22){
 					left = false;
 					}
 		
-		          
+		            
+					
+					if (gun.position.y < 290 && up == false ){
+                  	
+		             gun.position.y += 0.5;	
+			
+		            }
+					else if (gun.position.y > 285){
+					up = true;
+					}
+					
+					if (gun.position.y > 240 && up == true ){
+                  	
+		             gun.position.y -= 0.5;	
+			
+		            }
+					else if (gun.position.y < 245){
+					up = false;
+					}
 					
 					
 
@@ -827,7 +923,7 @@
 					
 					if ( InAir == true ) {
 					velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
-                    
+                    pup = false;
 					}
 					else{
 					
@@ -848,6 +944,14 @@
 					}
 					
 					
+					if (tookGun == true){
+					gun.visible = false;
+					sessionStorage.setItem("Gun", "true");
+					
+					
+					}
+					
+					if (sessionStorage.getItem("Gun") == 'true'){ tookGun = true;}
 					
 					
 					controls.getObject().translateX( velocity.x * delta );
