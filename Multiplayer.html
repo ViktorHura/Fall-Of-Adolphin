@@ -1,0 +1,98 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Fall of Adolphin</title>
+		<style>
+		
+		html { 
+        background: url(images/BackgroundM.png) no-repeat center center fixed; 
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        }
+		
+		</style>
+		 
+		 <div id='servers' style='position: absolute;'>
+		 <input type="Button" onclick="joinserver1()" value="Server1(Cloud9-USA)">
+		 <p style="font-size:150%;color:red;" id='Status'></p>
+	    </div>
+		
+		<a href="https://github.com/ViktorHura/ViktorHura.github.io"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/652c5b9acfaddf3a9c326fa6bde407b87f7be0f4/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6f72616e67655f6666373630302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png"></a>
+	
+	
+	</head>
+	<body>
+		<script>
+		
+		
+		function SetPos(){
+		
+		document.getElementById('servers').style.left = window.innerWidth / 2 - 200 + 'px';
+		document.getElementById('servers').style.top = window.innerHeight / 2 - 100 + 'px';
+		document.getElementById('servers').style.height = 100 + 'px';
+		document.getElementById('servers').style.width = 200 + 'px';
+			
+		
+		
+		}
+		SetPos();
+		
+			var Pos = setInterval(function(){
+			
+		    checkServerStatus();
+			SetPos();
+					
+			}, 500);
+		
+		
+		var server;
+        var img;
+
+function checkServerStatus()
+{
+    if(server != 1){
+    img = document.body.appendChild(document.createElement("img"));
+img.src = "https://fallofadolphinmultiplayer-spektordude.c9users.io/images/Crosshair.png"
+img.onload = function()
+    {
+        server = 1;
+        console.log(server);
+        document.body.removeChild(img);
+		document.getElementById('Status').innerHTML ='Online';
+
+    };
+    img.onerror = function()
+    {
+        server = 0;
+		document.body.removeChild(img);
+		document.getElementById('Status').innerHTML ='Ofline';
+    };
+	}
+}
+
+function joinserver1(){
+
+if(server == 1){
+
+window.open('https://fallofadolphinmultiplayer-spektordude.c9users.io/','_self',false)
+
+
+}
+
+
+}
+
+
+
+
+		
+		
+	   
+	    
+		
+		
+		</script>
+	</body>
+</html>

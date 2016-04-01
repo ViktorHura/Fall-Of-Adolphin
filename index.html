@@ -16,6 +16,7 @@
 		<img src="images/PlayB.png" onclick="window.open('HouseInside.html','_self',false)" id='Play' style="position:absolute;"	>
 		<img src="images/SettingsB.png" onclick="window.open('Settings.html','_self',false)" id='Settings' style="position:absolute;"	>
 		<img src="images/CreditsB.png" onclick="window.open('Credits.html','_self',false)" id='Credits' style="position:absolute;"	>
+		<img src="images/MultiB.png" onclick="window.open('Multiplayer.html','_self',false)" id='Multiplayer' style="position:absolute;"	>
 		
 	    
 		
@@ -61,6 +62,11 @@ if(isIOSChrome){
 		document.getElementById('Credits').style.top = window.innerHeight / 4 + 300;
 		document.getElementById('Credits').style.height = 100 + 'px';
 		document.getElementById('Credits').style.width = 200 + 'px';
+		
+		document.getElementById('Multiplayer').style.left = document.getElementById('Play').style.left;
+		document.getElementById('Multiplayer').style.top = window.innerHeight / 4 + 450;
+		document.getElementById('Multiplayer').style.height = 100 + 'px';
+		document.getElementById('Multiplayer').style.width = 200 + 'px';
 			
 		
 		}
