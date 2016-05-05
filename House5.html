@@ -2,7 +2,8 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Fall of Adolphin</title>
-		<img src="images/loading.gif" id="loadingscreen" style="position:absolute;z-index: 50;width: 100%;height: 100%;visibility: visible;">
+		<img src="images/loading.gif" id="loadingscreen" style="position:absolute;left:12%;z-index: 50;width: 75%;height: 80%;visibility: visible;">
+		<img src="images/black.png" id="loadingscreenB" style="position:absolute;z-index: 49;width: 100%;height: 100%;visibility: visible;">
 		<style>
 			html, body {
 				width: 100%;
@@ -109,6 +110,7 @@
 			
 			if (loaded == true){
 					document.getElementById('loadingscreen').style.visibility = 'hidden';
+					 document.getElementById('loadingscreenB').style.visibility = 'hidden';
 					
 					}
 					
