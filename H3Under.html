@@ -2,6 +2,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Fall of Adolphin</title>
+		<img src="images/loading.gif" id="loadingscreen" style="position:absolute;z-index: 50;width: 100%;height: 100%;visibility: visible;">
 		<style>
 			html, body {
 				width: 100%;
@@ -106,7 +107,7 @@
 		    var loadingscreen = setInterval(function(){
 			
 			if (loaded == true){
-					document.getElementById('Info').innerHTML ='Click to Play';
+					document.getElementById('loadingscreen').style.visibility = 'hidden';
 					
 					}
 					
@@ -221,7 +222,7 @@
 				document.addEventListener( 'webkitpointerlockerror', pointerlockerror, false );
 
 				instructions.addEventListener( 'click', function ( event ) {
-
+                    if (loaded == true){
 					instructions.style.display = 'none';
 
 					// Ask the browser to lock the pointer
@@ -253,7 +254,7 @@
 						element.requestPointerLock();
 
 					}
-
+                 }
 				}, false );
 
 			} else {
@@ -407,7 +408,7 @@
 				
 				var loader = new THREE.ObjectLoader();
                  loader.load("H3.json",function ( obj ) {
-				 loaded = true;
+				 
 				 controls.getObject().rotation.y = 3.14;
 				 controls.getObject().position.set(0,50,0);
 				 map = obj;
@@ -455,6 +456,7 @@
 				  
                  scene.add( map );
 				 objects.push(map);
+				 setTimeout(function(){ loaded = true; }, 500);
                  });
 
 				window.addEventListener( 'resize', onWindowResize, false );
