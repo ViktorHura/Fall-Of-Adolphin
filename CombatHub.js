@@ -1,4 +1,7 @@
 
+            var HitSound = 'HitSound'
+            createjs.Sound.registerSound("Sounds/Step.ogg", HitSound );
+  
             var geometryWing = new THREE.PlaneGeometry( 50, 5, 1, 1 );
 
 			var textureWing = new THREE.ImageUtils.loadTexture('images/Wing.png' );      
@@ -30,6 +33,7 @@
 			if (controls.enabled == true){
 				
             slapanimation = true;
+			createjs.Sound.play("HitSound" , {volume: fxvolume });
 			IsHitting = true;
 			setTimeout(function(){ IsHitting = false }, 100);
 			
