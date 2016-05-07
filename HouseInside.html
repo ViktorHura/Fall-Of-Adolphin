@@ -149,11 +149,12 @@
 					if ( document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element ) {
                         
 						if (loaded == true){
+						
 						controlsEnabled = true;
 						controls.enabled = true;
 
 						blocker.style.display = 'none';
-						}
+						}	
 						
 
 					} else {
@@ -300,6 +301,8 @@
 							if ( canJump === true ) velocity.y += 350;
 							canJump = false;
 							break;
+							
+						
 
 					}
 
@@ -668,5 +671,7 @@
 		</script>
 		<script src="Hud.js"></script>
         <script src='CombatHub.js'></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+		<script src='compatibility.js'></script>
 	</body>
 </html>
