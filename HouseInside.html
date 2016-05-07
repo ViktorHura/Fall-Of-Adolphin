@@ -98,6 +98,8 @@
 		
 		<script>
 		var hp = 100;
+		
+		
 		</script>
 
 		<script>
@@ -228,6 +230,7 @@
 
 			}
 
+			
 			init();
 			animate();
 
@@ -263,36 +266,37 @@
 				var onKeyDown = function ( event ) {
 
 					switch ( event.keyCode ) {
+					
 
 						case 90: // up
-						case 87: // w
+						case Number(W_key): // w
 							moveForward = true;
 							break;
 
 						case 81: // left
-						case 65: // a
+						case Number(A_key): // a
 							moveLeft = true; break;
 
 						case 40: // down
-						case 83: // s
+						case Number(S_key): // s
 							moveBackward = true;
 							break;
 
 						case 39: // right
-						case 68: // d
+						case Number(D_key): // d
 							moveRight = true;
 							break;
 							
-						case 69: // E
+						case Number(E_key): // E
 							Ekey = true;
 							break;
 							
 						
-						case 16: // shift
+						case Number(Shift_key): // shift
 							Sprint = true;
 							break;
 
-						case 32: // space
+						case Number(Space_key): // space
 							if ( canJump === true ) velocity.y += 350;
 							canJump = false;
 							break;
@@ -306,37 +310,39 @@
 					switch( event.keyCode ) {
 
 						case 90: // up
-						case 87: // w
+						case Number(W_key): // w
 							moveForward = false;
 							break;
 
 						case 81: // left
-						case 65: // a
+						case Number(A_key): // a
 							moveLeft = false;
 							break;
 
 						case 40: // down
-						case 83: // s
+						case Number(S_key): // s
 							moveBackward = false;
 							break;
 
 						case 39: // right
-						case 68: // d
+						case Number(D_key): // d
 							moveRight = false;
 							break;
 						
-						case 69: // E
+						case Number(E_key): // E
 							Ekey = false;
 							break;
 							
-							case 16: // shift
+							case Number(Shift_key): // shift
 							Sprint = false;
 							break;
 
 					}
 
 				};
-
+				
+				
+                
 				document.addEventListener( 'keydown', onKeyDown, false );
 				document.addEventListener( 'keyup', onKeyUp, false );
 

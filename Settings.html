@@ -20,6 +20,15 @@
 	  <font size= '5' color="dark green">Effects Volume: </font> <input type="text" name="vol" value="1">  <font color="0x009900"> - How loud the effects volume is.</font><br><br>
 	  <font size= '5' color="dark green">Antialiasing: </font> <input type="text" name="aa" value="0" readonly></input> <input type="Button" onclick="x.aa.value = true" value="True"> <input type="Button" onclick="x.aa.value = false" value="False"> <font color="0x009900"> - Makes everything look smooth.</font><br><br>
 	  
+	  <font size= '5' color="dark green">Move Forward</font> <input type="text" id="W" onkeydown="return KeyPressW(event)"  /> <br>
+	  <font size= '5' color="dark green">Move Left</font> <input type="text" id="A" onkeydown="return KeyPressA(event)"  /> <br>
+	  <font size= '5' color="dark green">Move Backwards</font> <input type="text" id="S" onkeydown="return KeyPressS(event)"  /> <br>
+	  <font size= '5' color="dark green">Move Right</font> <input type="text" id="D" onkeydown="return KeyPressD(event)"  /> <br>
+	  
+	  <font size= '5' color="dark green">Use/Interact</font> <input type="text" id="E" onkeydown="return KeyPressE(event)"  /> <br>
+	  <font size= '5' color="dark green">Jump</font> <input type="text" id="JUMP" onkeydown="return KeyPressJUMP(event)"  /> <br>
+	  <font size= '5' color="dark green">Sprint</font> <input type="text" id="SPRINT" onkeydown="return KeyPressSPRINT(event)"  /> <br><br>
+	  
 	  
      <input type="Button" onclick="Save()" value="Save">
 	 <input type="Button" onclick="window.open('index.html','_self',false)" value="Main Menu">
@@ -31,6 +40,222 @@
 	</head>
 	<body>
 		<script>
+		
+		var W_key = document.cookie.replace(/(?:(?:^|.*;\s*)W_key\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+		W.value = String.fromCharCode(document.cookie.replace(/(?:(?:^|.*;\s*)W_key\s*\=\s*([^;]*).*$)|^.*$/, "$1"));
+		
+		var A_key = document.cookie.replace(/(?:(?:^|.*;\s*)A_key\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+		A.value = String.fromCharCode(document.cookie.replace(/(?:(?:^|.*;\s*)A_key\s*\=\s*([^;]*).*$)|^.*$/, "$1"));
+		
+		var S_key = document.cookie.replace(/(?:(?:^|.*;\s*)S_key\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+		S.value = String.fromCharCode(document.cookie.replace(/(?:(?:^|.*;\s*)S_key\s*\=\s*([^;]*).*$)|^.*$/, "$1"));
+		
+		var D_key = document.cookie.replace(/(?:(?:^|.*;\s*)D_key\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+		D.value = String.fromCharCode(document.cookie.replace(/(?:(?:^|.*;\s*)D_key\s*\=\s*([^;]*).*$)|^.*$/, "$1"));
+		
+		var E_key = document.cookie.replace(/(?:(?:^|.*;\s*)E_key\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+		E.value = String.fromCharCode(document.cookie.replace(/(?:(?:^|.*;\s*)E_key\s*\=\s*([^;]*).*$)|^.*$/, "$1"));
+		
+		var Jump_key = document.cookie.replace(/(?:(?:^|.*;\s*)Space_key\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+		
+		if (document.cookie.replace(/(?:(?:^|.*;\s*)Space_key\s*\=\s*([^;]*).*$)|^.*$/, "$1") == 32){
+		JUMP.value = 'Space';
+		}else{
+		JUMP.value = String.fromCharCode(document.cookie.replace(/(?:(?:^|.*;\s*)Space_key\s*\=\s*([^;]*).*$)|^.*$/, "$1"));
+		}
+		
+		var Sprint_key = document.cookie.replace(/(?:(?:^|.*;\s*)Shift_key\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+		if (document.cookie.replace(/(?:(?:^|.*;\s*)Shift_key\s*\=\s*([^;]*).*$)|^.*$/, "$1") == 16){
+		SPRINT.value = 'Shift';
+		}else{
+		SPRINT.value = String.fromCharCode(document.cookie.replace(/(?:(?:^|.*;\s*)Shift_key\s*\=\s*([^;]*).*$)|^.*$/, "$1"));
+		}
+		
+		function KeyPressW(e){
+             var keynum;
+			
+			
+             if(window.event) { // IE			 
+              keynum = e.keyCode;
+              } else if(e.which){ // Netscape/Firefox/Opera                   
+             keynum = e.which;
+             }
+
+             document.getElementById('W').value = " ";
+			 document.getElementById('W').value = String.fromCharCode(keynum);
+			 document.getElementById('W').value = " ";
+			 if (keynum == 16){
+			 document.getElementById('W').value = 'Shift';
+			 }
+			 if (keynum == 32){
+			 document.getElementById('W').value = 'Space';
+			 }
+			 
+			 W_key = keynum;
+             
+			 
+			 
+            }
+			
+		function KeyPressA(e){
+             var keynum;
+			
+			
+             if(window.event) { // IE			 
+              keynum = e.keyCode;
+              } else if(e.which){ // Netscape/Firefox/Opera                   
+             keynum = e.which;
+             }
+
+             document.getElementById('A').value = " ";
+			 document.getElementById('A').value = String.fromCharCode(keynum);
+			 document.getElementById('A').value = " ";
+			 if (keynum == 16){
+			 document.getElementById('A').value = 'Shift';
+			 }
+			 if (keynum == 32){
+			 document.getElementById('A').value = 'Space';
+			 }
+			 
+			 A_key = keynum;
+             
+			 
+			 
+            }
+		
+		function KeyPressS(e){
+             var keynum;
+			
+			
+             if(window.event) { // IE			 
+              keynum = e.keyCode;
+              } else if(e.which){ // Netscape/Firefox/Opera                   
+             keynum = e.which;
+             }
+
+             document.getElementById('S').value = " ";
+			 document.getElementById('S').value = String.fromCharCode(keynum);
+			 document.getElementById('S').value = " ";
+			 if (keynum == 16){
+			 document.getElementById('S').value = 'Shift';
+			 }
+			 if (keynum == 32){
+			 document.getElementById('S').value = 'Space';
+			 }
+			 
+			 S_key = keynum;
+             
+			 
+			 
+            }
+		
+		function KeyPressD(e){
+             var keynum;
+			
+			
+             if(window.event) { // IE			 
+              keynum = e.keyCode;
+              } else if(e.which){ // Netscape/Firefox/Opera                   
+             keynum = e.which;
+             }
+
+             document.getElementById('D').value = " ";
+			 document.getElementById('D').value = String.fromCharCode(keynum);
+			 document.getElementById('D').value = " ";
+			 if (keynum == 16){
+			 document.getElementById('D').value = 'Shift';
+			 }
+			 if (keynum == 32){
+			 document.getElementById('D').value = 'Space';
+			 }
+			 
+			 D_key = keynum;
+             
+			 
+			 
+            }
+		
+		
+		function KeyPressE(e){
+             var keynum;
+			
+			
+             if(window.event) { // IE			 
+              keynum = e.keyCode;
+              } else if(e.which){ // Netscape/Firefox/Opera                   
+             keynum = e.which;
+             }
+
+             document.getElementById('E').value = " ";
+			 document.getElementById('E').value = String.fromCharCode(keynum);
+			 document.getElementById('E').value = " ";
+			 if (keynum == 16){
+			 document.getElementById('E').value = 'Shift';
+			 }
+			 if (keynum == 32){
+			 document.getElementById('E').value = 'Space';
+			 }
+			 
+			 E_key = keynum;
+             
+			 
+			 
+            }
+		
+		
+		function KeyPressJUMP(e){
+             var keynum;
+			
+			
+             if(window.event) { // IE			 
+              keynum = e.keyCode;
+              } else if(e.which){ // Netscape/Firefox/Opera                   
+             keynum = e.which;
+             }
+
+             document.getElementById('JUMP').value = " ";
+			 document.getElementById('JUMP').value = String.fromCharCode(keynum);
+			 document.getElementById('JUMP').value = " ";
+			 if (keynum == 16){
+			 document.getElementById('JUMP').value = 'Shift';
+			 }
+			 if (keynum == 32){
+			 document.getElementById('JUMP').value = 'Space';
+			 }
+			 
+			 Jump_key = keynum;
+             
+			 
+			 
+            }
+		
+		function KeyPressSPRINT(e){
+             var keynum;
+			
+			
+             if(window.event) { // IE			 
+              keynum = e.keyCode;
+              } else if(e.which){ // Netscape/Firefox/Opera                   
+             keynum = e.which;
+             }
+
+             document.getElementById('SPRINT').value = " ";
+			 document.getElementById('SPRINT').value = String.fromCharCode(keynum);
+			 document.getElementById('SPRINT').value = " ";
+			 if (keynum == 16){
+			 document.getElementById('SPRINT').value = 'Shift';
+			 }
+			 if (keynum == 32){
+			 document.getElementById('SPRINT').value = 'Space';
+			 }
+			 
+			 Sprint_key = keynum;
+             
+			 
+			 
+            }
+		
+		
 		
 		function SetPos(){
 		
@@ -73,8 +298,17 @@
 		document.cookie="sensitivity=" + sensitivity;
 		document.cookie="volume=" + volume;
 		document.cookie="aa=" + aa;
-
-        
+       
+        document.cookie="W_key=" + W_key;
+		document.cookie="A_key=" + A_key;
+		document.cookie="S_key=" + S_key;
+		document.cookie="D_key=" + D_key;
+		
+		document.cookie="E_key=" + E_key;
+		document.cookie="Space_key=" + Jump_key;
+		document.cookie="Shift_key=" + Sprint_key;
+		
+		
 		}
 		
 		</script>
