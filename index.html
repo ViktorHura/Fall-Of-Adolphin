@@ -31,7 +31,7 @@
 
 		
 		if (window.location.protocol !== 'https:') {
-      window.location = 'https://' + window.location.hostname + window.location.pathname + window.location.hash;
+        window.location = 'https://' + window.location.hostname + window.location.pathname + window.location.hash;
        }
 		
 		function SetPos(){
@@ -46,15 +46,15 @@
 		document.getElementById('Settings').style.height = 100 + 'px';
 		document.getElementById('Settings').style.width = 200 + 'px';
 		
-		document.getElementById('Credits').style.left = document.getElementById('Play').style.left;
-		document.getElementById('Credits').style.top = window.innerHeight / 4 + 300;
-		document.getElementById('Credits').style.height = 100 + 'px';
-		document.getElementById('Credits').style.width = 200 + 'px';
-		
 		document.getElementById('Multiplayer').style.left = document.getElementById('Play').style.left;
-		document.getElementById('Multiplayer').style.top = window.innerHeight / 4 + 450;
+		document.getElementById('Multiplayer').style.top = window.innerHeight / 4 + 300;
 		document.getElementById('Multiplayer').style.height = 100 + 'px';
 		document.getElementById('Multiplayer').style.width = 200 + 'px';
+		
+		document.getElementById('Credits').style.left = document.getElementById('Play').style.left;
+		document.getElementById('Credits').style.top = window.innerHeight / 4 + 450;
+		document.getElementById('Credits').style.height = 100 + 'px';
+		document.getElementById('Credits').style.width = 200 + 'px';
 		
 		document.getElementById('Download').style.left = 0 + 'px';
 		document.getElementById('Download').style.top = window.innerHeight - 20 + 'px';
