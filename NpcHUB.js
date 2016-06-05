@@ -10,10 +10,16 @@ var geometry2NPC = new THREE.PlaneGeometry( 30, 60, 1, 1 );
             var textureBackNPC = new THREE.ImageUtils.loadTexture('images/DolphinBack.png' );
 
                 // material
-             var material1NPC = new THREE.MeshBasicMaterial( { color: 0xffffff, map: textureBackNPC ,depthWrite: false} );
+             var material1NPC = new THREE.MeshBasicMaterial( { color: 0xffffff, map: textureBackNPC ,depthWrite: false, } );
 			 material1NPC.transparent = true;
+			 material1NPC.anisotropy = renderer.getMaxAnisotropy();
              var material2NPC = new THREE.MeshBasicMaterial( { color: 0xffffff, map: textureFrontNPC ,depthWrite: false} );
 			 material2NPC.transparent = true;
+			 material2NPC.anisotropy = renderer.getMaxAnisotropy();
+			 
+			 
+			 
+            
 			 
 			 // VARIABLES
 			 var rotObj1;

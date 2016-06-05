@@ -121,7 +121,6 @@
 			if (loaded == true){
 					document.getElementById('loadingscreen').style.visibility = 'hidden';
 					 document.getElementById('loadingscreenB').style.visibility = 'hidden';
-					
 					}
 					
 			}, 250);
@@ -203,7 +202,7 @@
 				document.addEventListener( 'webkitpointerlockerror', pointerlockerror, false );
 
 				instructions.addEventListener( 'click', function ( event ) {
-                     if (loaded == true){
+                    if (loaded == true){
 					instructions.style.display = 'none';
 
 					// Ask the browser to lock the pointer
@@ -236,7 +235,7 @@
 						element.requestPointerLock();
 
 					}
-                 }
+                }
 				}, false );
 
 			} else {
@@ -390,7 +389,7 @@
 				
 				var loader = new THREE.ObjectLoader();
                  loader.load("SceneHouse.json",function ( obj ) {
-				  setTimeout(function(){ loaded = true; }, 500);
+				 setTimeout(function(){ loaded = true; }, 500);
                  scene.add( obj );
 				 
 				
@@ -494,7 +493,7 @@
 			
 		   
 			
-			window.open ('Hub.html#H5','_self',false);
+			window.open ('Hub.html#H6','_self',false);
 				
 		
 			}

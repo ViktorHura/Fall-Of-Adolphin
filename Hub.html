@@ -285,7 +285,7 @@
 
 			function init() {
 
-				camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+				camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000000 );
 
 
 				scene = new THREE.Scene();
@@ -412,6 +412,7 @@
                  loader.load("scene.json",function ( obj ) {
 				 
 				 controls.getObject().rotation.y = 3.14;
+				 controls.getObject().position.y = 50;
 				 map = obj;
 				 if (hash == 'Vodka'){ controls.getObject().position.set(670,60,-100); }
 				 else if (hash == 'H4'){ controls.getObject().position.set(670,60,-100); }
@@ -422,6 +423,7 @@
                  scene.add( map );
 				 objects.push(map);
 				 setTimeout(function(){ loaded = true; }, 500);
+				 controls.getObject().position.y = 50;
                  });
                   
 				window.addEventListener( 'resize', onWindowResize, false );

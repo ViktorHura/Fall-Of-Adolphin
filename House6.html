@@ -64,7 +64,7 @@
 		</style>
 	</head>
 	<body id='body'>
-		<script src="Three.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r77/three.min.js"></script>
 		<script src="Settings.js"></script>
 		<script src="PointerLockControls.js"></script>
 		<script src="https://code.createjs.com/soundjs-0.6.2.min.js"></script></head>
@@ -126,6 +126,8 @@
 			}, 250);
 			
 			var cleared = false;
+			
+			var InAir = false;
 			
 		    var ClearChat = setInterval(function(){
 			
@@ -261,14 +263,12 @@
 
 			function init() {
 
-				camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+				camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 20000 );
 
 				scene = new THREE.Scene();
 				//scene.fog = new THREE.Fog( 0xffffff, 3000, 3000 );
 
-				var light = new THREE.HemisphereLight( 0xeeeeff, 0x777788, 0.75 );
-				light.position.set( 0.5, 1, 0.75 );
-				scene.add( light );
+				
 
 				controls = new THREE.PointerLockControls( camera );
 				scene.add( controls.getObject() );
@@ -312,7 +312,7 @@
 							if ( canJump === true ){
 							
                            	canJump = false;						
-							velocity.y += 400;
+							velocity.y += 350;
 							}
 							
 							
@@ -388,14 +388,16 @@
 				//
 				
 				var loader = new THREE.ObjectLoader();
-                 loader.load("SceneHouse.json",function ( obj ) {
+                 loader.load("House5.json",function ( obj ) {
 				 setTimeout(function(){ loaded = true; }, 500);
                  scene.add( obj );
 				 
+				controls.getObject().rotation.y = -3.14;
 				
-				 controls.getObject().position.z = 100;
-				 controls.getObject().position.x = 0;
-				 controls.getObject().rotation.y = 0;
+				 controls.getObject().position.z = -178;
+				 
+				 controls.getObject().position.x = -20;
+				 controls.getObject().position.y = 70;
 				 
 				 
 				 
@@ -421,7 +423,7 @@
 			
 			var CollisionDetection = setInterval(function(){
 			
-			
+			/*
 			//// WALlS////////////////////////////////
 			if (controls.getObject().position.x > 135){
 					controls.getObject().position.x = 135;	
@@ -450,7 +452,7 @@
 			else if (controls.getObject().position.x < -130){ controls.getObject().position.x = -150; }
 			else if (controls.getObject().position.x > -70){ controls.getObject().position.x = -50 }
 			
-			}
+			}/*
 			/////////TABLE///////////////////////////////////
 			if ( controls.getObject().position.z < -30 && controls.getObject().position.z > -150  &&
 		    controls.getObject().position.x > 80 && controls.getObject().position.x < 150){
@@ -461,7 +463,8 @@
 			else if (controls.getObject().position.x > 130){ controls.getObject().position.x = 150 }
 			
 			}
-			/////////FIRE///////////////////////////////////
+			/////////FIRE/////////////////////////////////// 
+			/*
 			if ( controls.getObject().position.z < 100 && controls.getObject().position.z > -30  &&
 		    controls.getObject().position.x > 80 && controls.getObject().position.x < 150){
 			
@@ -471,12 +474,74 @@
 			else if (controls.getObject().position.x > 130){ controls.getObject().position.x = 150 }
 			
 			}
+			*/
 			
 			
-			}, 0.1);
+			TestandPrevCol(controls.getObject(), BOXC, 75,80,30 );
+			TestandPrevCol(controls.getObject(), BOXC2, 150,120,10 );
+			TestandPrevCol(controls.getObject(), BOXC3, 75,100,10 );
+			
+			}, 0.001);
 			
 			
 		  
+			
+			
+			
+			
+			
+			
+			
+			function TestandPrevCol(player, mesh, x,y,z ){
+			
+			
+			
+			
+			if (player.position.z < mesh.position.z + z / 2 + 1 && player.position.z > mesh.position.z - z/2 - 1  
+			 && player.position.x < mesh.position.x + x / 2 + 1 && player.position.x > mesh.position.x - x/2 - 1
+			 && player.position.y < mesh.position.y + 100 + y / 2  && player.position.y > mesh.position.y - y/2 - 1){
+			
+			if( player.position.z > mesh.position.z + z/2 - 5 && player.position.y < mesh.position.y + y/2 + 1 ){ player.position.z = mesh.position.z + z/2  }
+			else if( player.position.z < mesh.position.z - z/2 + 5 && player.position.y < mesh.position.y + y/2 + 1 ){ player.position.z = mesh.position.z - z/2  }
+			
+			if( player.position.x > mesh.position.x + x/2 - 5 && player.position.y < mesh.position.y + y/2 + 1 ){ player.position.x = mesh.position.x + x/2  }
+		    else if( player.position.x < mesh.position.x - x/2 + 5 && player.position.y < mesh.position.y + y/2 + 1 ){ player.position.x = mesh.position.x - x/2  }
+			
+			if(player.position.y > mesh.position.y + y/2 && player.position.y < mesh.position.y + y/2 + 70){ player.position.y = mesh.position.y + y/2 + 70; velocity.y = 0; InAir = false;  canJump = true }
+			else if(player.position.y > mesh.position.y - y/2 && player.position.y < mesh.position.y ){ player.position.y = player.position.y - 1}
+			
+			
+			}
+			else{
+			InAir = true;
+			}	
+			
+			}
+			
+			////////////////////////////
+			
+			
+			var seeoutline = false;
+			
+			
+			materialB = new THREE.MeshPhongMaterial( { specular: 0xffffff, shading: THREE.FlatShading} );
+
+			var BOXC = new THREE.Mesh( new THREE.BoxGeometry( 75, 80, 30 ), materialB );
+			BOXC.position.set(-28.39,40,-2.5);
+			scene.add( BOXC );
+			BOXC.visible = seeoutline;
+			
+			var BOXC2 = new THREE.Mesh( new THREE.BoxGeometry( 150, 120, 10), materialB );
+			BOXC2.position.set(-28.39, 60, 14.16);
+			scene.add( BOXC2 );
+			BOXC2.visible = seeoutline;
+			
+			var BOXC3 = new THREE.Mesh( new THREE.BoxGeometry( 75, 100, 10), materialB );
+			BOXC3.position.set(-24.46, 52.01, -198.55);
+			scene.add( BOXC3 );
+			BOXC3.visible = seeoutline;
+			
+			////////////////////////////////////////////////////
 			
 			
 			
@@ -484,7 +549,7 @@
 			/////////////Opening Door//////////////
 			
 			
-			if(controls.getObject().position.z > 100 && controls.getObject().position.z < 150 && controls.getObject().position.x > -30  && controls.getObject().position.x < 30 ){
+			if(controls.getObject().position.z < -180 && controls.getObject().position.z > -200 && controls.getObject().position.x > -30  && controls.getObject().position.x < 30 ){
 			
 			
 			document.getElementById('dialog').innerHTML ='[Press E]';
@@ -507,11 +572,6 @@
 			////////////////////////////
 			/////////////////////////////
 			}, 0.1);
-			
-			////////////////////////////
-			
-			////////////////////////////////////////////////////
-			
 			
 			
 			function animate() {
@@ -545,7 +605,7 @@
 					velocity.x -= velocity.x * 10.0 * delta;
 					velocity.z -= velocity.z * 10.0 * delta;
 
-					velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
+					
 
 					if ( moveForward ) velocity.z -= 400.0 * delta * speed;
 					if ( moveBackward ) velocity.z += 400.0 * delta * speed;
@@ -555,24 +615,31 @@
                     
 					
 					
-					if ( isOnObject === true ) {
-						velocity.y = Math.max( 0, velocity.y );
-
-						canJump = true;
+					if ( InAir == true ) {
+					velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
+                    pup = false;
+					}
+					else{
+					
 					}
 					
+					if (velocity.y > 10){
+					InAir = true;
 					
+					}
 
 					controls.getObject().translateX( velocity.x * delta );
 					controls.getObject().translateY( velocity.y * delta );
 					controls.getObject().translateZ( velocity.z * delta );
 
-					if ( controls.getObject().position.y < 75 ) {
+					if ( controls.getObject().position.y < 70 || controls.getObject().position.y == 70 ) {
 
 						velocity.y = 0;
-						controls.getObject().position.y = 75;
+						controls.getObject().position.y = 70;
 
 						canJump = true;
+						surface = 'metal';
+						InAir = false;
 
 					}
 					
