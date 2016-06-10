@@ -62,7 +62,7 @@
 		</style>
 	</head>
 	<body id='body' >
-		<script src="Three.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r77/three.min.js"></script>
 		<script src="Settings.js"></script>
 		
 		<script src="PointerLockControls.js"></script>
@@ -291,9 +291,9 @@
 				scene = new THREE.Scene();
 				//scene.fog = new THREE.Fog( 0xffffff, 3000, 3000 );
 
-				var light = new THREE.HemisphereLight( 0xeeeeff, 0x777788, 0.75 );
-				light.position.set( 0.5, 1, 0.75 );
-				scene.add( light );
+				//var light = new THREE.HemisphereLight( 0xeeeeff, 0x777788, 0.75 );
+				//light.position.set( 0.5, 1, 0.75 );
+				//scene.add( light );
 
 				controls = new THREE.PointerLockControls( camera );
 				scene.add( controls.getObject() );
@@ -409,7 +409,7 @@
 				
 				
 				var loader = new THREE.ObjectLoader();
-                 loader.load("scene.json",function ( obj ) {
+                 loader.load("scene2.json",function ( obj ) {
 				 
 				 controls.getObject().rotation.y = 3.14;
 				 controls.getObject().position.y = 50;
