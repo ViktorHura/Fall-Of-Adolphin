@@ -279,10 +279,6 @@
 				scene = new THREE.Scene();
 				//scene.fog = new THREE.Fog( 0xffffff, 3000, 3000 );
 
-				var light = new THREE.HemisphereLight( 0xeeeeff, 0x777788, 0.75 );
-				light.position.set( 0.5, 1, 0.75 );
-				scene.add( light );
-
 				controls = new THREE.PointerLockControls( camera );
 				scene.add( controls.getObject() );
 				
@@ -504,7 +500,7 @@
 			material.transparent  = true;
  
             mesh = new THREE.Mesh( geometry, material );
-			mesh.position.set(7, 40, -100);
+			mesh.position.set(7, 20, -100);
  
             scene.add( mesh );
 			mesh.name = 'Ladder';
