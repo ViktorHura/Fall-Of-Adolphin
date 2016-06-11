@@ -175,9 +175,13 @@
 			var Chair3;
 			var gun;
 			
+			var light;
+			
 			var Chair4;
 			var Chair5;
 			var Chair6;
+			
+			var Torch;
 			
 			var loaded = false;
 			
@@ -306,9 +310,9 @@
 				scene = new THREE.Scene();
 				//scene.fog = new THREE.Fog( 0xffffff, 3000, 3000 );
 
-				var light = new THREE.HemisphereLight( 0xeeeeff, 0x777788, 0.75 );
-				light.position.set( 0.5, 1, 0.75 );
-				scene.add( light );
+				light = new THREE.PointLight( 0xCC9900, 1, 600 );
+                light.position.set( 0, 50, 0 );
+                scene.add( light );
 
 				controls = new THREE.PointerLockControls( camera );
 				scene.add( controls.getObject() );
@@ -435,6 +439,12 @@
                  Chair1 = obj.getObjectByName( "Chair", true );
                  Chair1.material.map = textureChair;
 				 
+				 Torch = obj.getObjectByName( "Torch", true );
+				 
+				 //Torch.position.z = 10;
+				// Torch.position.x = -5;
+				// Torch.position.y = 35;
+				 
 				 Ladder = obj.getObjectByName( "Ladder", true );
 				 
 			     objects.push( Ladder );
@@ -473,6 +483,13 @@
 				  
                  scene.add( map );
 				 objects.push(map);
+				 scene.remove(Torch);
+				 Torch.position.y = -15;
+	             Torch.position.z = -9;
+	             Torch.position.x = 10;
+				 Torch.rotation.y = 3.5;
+				 Torch.rotation.z = 3.5;
+				 camera.add(Torch);
 				 setTimeout(function(){ loaded = true; }, 500);
                  });
 
@@ -969,6 +986,19 @@
 					
 					
 					}
+					
+					
+					
+					camera.updateMatrixWorld();
+					
+					var vector8 = new THREE.Vector3();
+                    vector8.setFromMatrixPosition( Torch.matrixWorld );
+               
+			        light.position.z = controls.getObject().position.z;
+					light.position.x = controls.getObject().position.x;
+					light.position.y = controls.getObject().position.y; 
+				    
+					
 					
 					if (sessionStorage.getItem("Gun") == 'true'){ tookGun = true;}
 					

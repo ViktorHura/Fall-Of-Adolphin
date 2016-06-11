@@ -52,10 +52,13 @@
 		    if ( slapanimation == true ){
 				
 				Wing.visible = true;
+				if (typeof(Torch) != "undefined"){Torch.visible = false;}
 				if (Wing.rotation.y > 3.7){
 					slapanimation = false;
 					Wing.rotation.y = 1.57;
 					Wing.visible = false;
+					if (typeof(Torch) != "undefined"){Torch.visible = true;}
+					
 					
 				}else {
 					Wing.rotation.y += 0.03;
