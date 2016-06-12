@@ -238,6 +238,8 @@ function createNpc7 (){
 
 
 
+
+
 createMarchingNpc();
 createMarchingNpc2();
 createNpc3();
