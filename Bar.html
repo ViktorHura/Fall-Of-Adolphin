@@ -447,32 +447,11 @@
 		
 		    
 			
-			var CollisionDetection = setInterval(function(){
-			
-			
-			
-		
-		   
-		   //dynamic collision
-			
-			
-			
-			TestandPrevCol(controls.getObject(), BOXC, 5,5,5 );
 			
 			
 			
 			
-			
-			
-			
-		
-			
-			}, 0.0025);
-			
-			
-			
-			
-			var CollisionDetection = setInterval(function(){
+			var lights = setInterval(function(){
 			
 			
 			
@@ -522,14 +501,14 @@
 			 && player.position.x < mesh.position.x + x / 2 + 1 && player.position.x > mesh.position.x - x/2 - 1
 			 && player.position.y < mesh.position.y + 100 + y / 2  && player.position.y > mesh.position.y - y/2 - 1){
 			
-			if( player.position.z > mesh.position.z + z/2 - 5 && player.position.y < mesh.position.y + y/2 + 1 ){ player.position.z = mesh.position.z + z/2  }
-			else if( player.position.z < mesh.position.z - z/2 + 5 && player.position.y < mesh.position.y + y/2 + 1 ){ player.position.z = mesh.position.z - z/2  }
+			if( player.position.z > mesh.position.z + z/2 - 5 && player.position.y < mesh.position.y + y/2 + 1 ){ player.position.z = mesh.position.z + z/2; player.position.z = player.position.z + 2;  }
+			else if( player.position.z < mesh.position.z - z/2 + 5 && player.position.y < mesh.position.y + y/2 + 1 ){ player.position.z = mesh.position.z - z/2; player.position.z = player.position.z - 2;  }
 			
-			if( player.position.x > mesh.position.x + x/2 - 5 && player.position.y < mesh.position.y + y/2 + 1 ){ player.position.x = mesh.position.x + x/2  }
-		    else if( player.position.x < mesh.position.x - x/2 + 5 && player.position.y < mesh.position.y + y/2 + 1 ){ player.position.x = mesh.position.x - x/2  }
+			if( player.position.x > mesh.position.x + x/2 - 5 && player.position.y < mesh.position.y + y/2 + 1 ){ player.position.x = mesh.position.x + x/2; player.position.x = player.position.x + 2;  }
+		    else if( player.position.x < mesh.position.x - x/2 + 5 && player.position.y < mesh.position.y + y/2 + 1 ){ player.position.x = mesh.position.x - x/2; player.position.x = player.position.x - 2;  }
 			
 			if(player.position.y > mesh.position.y + y/2 && player.position.y < mesh.position.y + y/2 + 50){ player.position.y = mesh.position.y + y/2 + 50; velocity.y = 0; InAir = false;  canJump = true }
-			else if(player.position.y > mesh.position.y - y/2 && player.position.y < mesh.position.y ){ player.position.y = player.position.y - 1}
+			else if(player.position.y > mesh.position.y - y/2 && player.position.y < mesh.position.y ){ velocity.y = 0; player.position.y = player.position.y - 1}
 			
 			
 			}
@@ -548,17 +527,151 @@
 			///////physics////////
 		
 			
-			var seeoutline = true;
+			var seeoutline = false;
 			
 			
 			materialB = new THREE.MeshPhongMaterial( { specular: 0xffffff, shading: THREE.FlatShading} );
 
-			var BOXC = new THREE.Mesh( new THREE.BoxGeometry( 1, 1, 1 ), materialB );
-			BOXC.position.set(0,25,0);
+			var BOXC = new THREE.Mesh( new THREE.BoxGeometry( 300, 30, 30 ), materialB );
+			BOXC.position.set(150,20,-100);
 			scene.add( BOXC );
 			BOXC.visible = seeoutline;
 			
+			var BOXC2 = new THREE.Mesh( new THREE.BoxGeometry( 30, 30, 60 ), materialB );
+			BOXC2.position.set(16,20,-145);
+			scene.add( BOXC2 );
+			BOXC2.visible = seeoutline;
 			
+			var BOXC3 = new THREE.Mesh( new THREE.BoxGeometry( 410, 200, 20 ), materialB );
+			BOXC3.position.set(100,105,-180);
+			scene.add( BOXC3 );
+			BOXC3.visible = seeoutline;
+			
+			var BOXC4 = new THREE.Mesh( new THREE.BoxGeometry( 410, 200, 20 ), materialB );
+			BOXC4.position.set(100,105,305);
+			scene.add( BOXC4 );
+			BOXC4.visible = seeoutline;
+			
+			var BOXC5 = new THREE.Mesh( new THREE.BoxGeometry( 20, 200, 550 ), materialB );
+			BOXC5.position.set(-105,105,75);
+			scene.add( BOXC5 );
+			BOXC5.visible = seeoutline;
+			
+			var BOXC6 = new THREE.Mesh( new THREE.BoxGeometry( 20, 200, 550 ), materialB );
+			BOXC6.position.set(305,105,75);
+			scene.add( BOXC6 );
+			BOXC6.visible = seeoutline;
+			
+			var BOXC7 = new THREE.Mesh( new THREE.BoxGeometry( 75, 20, 20 ), materialB );
+			BOXC7.position.set(-60,20,-40);
+			scene.add( BOXC7 );
+			BOXC7.visible = seeoutline;
+			
+			var BOXC8 = new THREE.Mesh( new THREE.BoxGeometry( 75, 20, 40 ), materialB );
+			BOXC8.position.set(-60,40,0);
+			scene.add( BOXC8 );
+			BOXC8.visible = seeoutline;
+			
+			var BOXC9 = new THREE.Mesh( new THREE.BoxGeometry( 75, 20, 40 ), materialB );
+			BOXC9.position.set(-60,60,40);
+			scene.add( BOXC9 );
+			BOXC9.visible = seeoutline;
+			
+			var BOXC10 = new THREE.Mesh( new THREE.BoxGeometry( 75, 5, 250 ), materialB );
+			BOXC10.position.set(-60,90,180);
+			scene.add( BOXC10 );
+			BOXC10.visible = seeoutline;
+			
+			var BOXC11 = new THREE.Mesh( new THREE.BoxGeometry( 350, 5, 75 ), materialB );
+			BOXC11.position.set(125,90,265);
+			scene.add( BOXC11 );
+			BOXC11.visible = seeoutline;
+			
+			var BOXC12 = new THREE.Mesh( new THREE.BoxGeometry( 5, 30, 170 ), materialB );
+			BOXC12.position.set(-28,116,146);
+			scene.add( BOXC12 );
+			BOXC12.visible = seeoutline;
+			
+			var BOXC13 = new THREE.Mesh( new THREE.BoxGeometry( 400, 10, 600 ), materialB );
+			BOXC13.position.set(100,205,0);
+			scene.add( BOXC13 );
+			BOXC13.visible = seeoutline;
+			
+			var BOXC14 = new THREE.Mesh( new THREE.BoxGeometry( 350, 30, 5 ), materialB );
+			BOXC14.position.set(145,116,230);
+			scene.add( BOXC14 );
+			BOXC14.visible = seeoutline;
+			
+			var BOXC15 = new THREE.Mesh( new THREE.BoxGeometry( 200, 20, 100 ), materialB );
+			BOXC15.position.set(166,15,253);
+			scene.add( BOXC15 );
+			BOXC15.visible = seeoutline;
+			
+			var BOXC16 = new THREE.Mesh( new THREE.BoxGeometry( 40, 30, 40 ), materialB );
+			BOXC16.position.set(65,20,157);
+			scene.add( BOXC16 );
+			BOXC16.visible = seeoutline;
+			
+			var BOXC17 = new THREE.Mesh( new THREE.BoxGeometry( 40, 30, 40 ), materialB );
+			BOXC17.position.set(163,20,157);
+			scene.add( BOXC17 );
+			BOXC17.visible = seeoutline;
+			
+			var BOXC18 = new THREE.Mesh( new THREE.BoxGeometry( 40, 30, 40 ), materialB );
+			BOXC18.position.set(244,20,157);
+			scene.add( BOXC18 );
+			BOXC18.visible = seeoutline;
+			
+			var BOXC19 = new THREE.Mesh( new THREE.BoxGeometry( 40, 30, 40 ), materialB );
+			BOXC19.position.set(70,20,73);
+			scene.add( BOXC19 );
+			BOXC19.visible = seeoutline;
+			
+			var BOXC20 = new THREE.Mesh( new THREE.BoxGeometry( 40, 30, 40 ), materialB );
+			BOXC20.position.set(163,20,73);
+			scene.add( BOXC20 );
+			BOXC20.visible = seeoutline;
+			
+			var BOXC21 = new THREE.Mesh( new THREE.BoxGeometry( 40, 30, 40 ), materialB );
+			BOXC21.position.set(244,20,73);
+			scene.add( BOXC21 );
+			BOXC21.visible = seeoutline;
+			
+			
+			
+			var CollisionDetection = setInterval(function(){
+			
+			
+			
+		
+		   
+		   //dynamic collision
+			
+			
+			
+			TestandPrevCol(controls.getObject(), BOXC, 300,30,30 );
+			TestandPrevCol(controls.getObject(), BOXC2, 30,30,60 );
+			TestandPrevCol(controls.getObject(), BOXC3, 410,200,20 );
+			TestandPrevCol(controls.getObject(), BOXC4, 410,200,20 );
+			TestandPrevCol(controls.getObject(), BOXC5, 20,200,550 );
+			TestandPrevCol(controls.getObject(), BOXC6, 20,200,550 );
+			TestandPrevCol(controls.getObject(), BOXC7, 75,20,20 );
+			TestandPrevCol(controls.getObject(), BOXC8, 75,20,40 );
+		    TestandPrevCol(controls.getObject(), BOXC9, 75,20,40 );
+			TestandPrevCol(controls.getObject(), BOXC10, 75,5,250 );
+			TestandPrevCol(controls.getObject(), BOXC11, 350,5,75 );
+			TestandPrevCol(controls.getObject(), BOXC12, 5,30,170 );
+			TestandPrevCol(controls.getObject(), BOXC13, 400,20,600 );
+			TestandPrevCol(controls.getObject(), BOXC14, 350,30,5 );
+			TestandPrevCol(controls.getObject(), BOXC15, 200,20,100 );
+			TestandPrevCol(controls.getObject(), BOXC16, 40,30,40 );
+			TestandPrevCol(controls.getObject(), BOXC17, 40,30,40 );
+			TestandPrevCol(controls.getObject(), BOXC18, 40,30,40 );
+			TestandPrevCol(controls.getObject(), BOXC19, 40,30,40 );
+			TestandPrevCol(controls.getObject(), BOXC20, 40,30,40 );
+			TestandPrevCol(controls.getObject(), BOXC21, 40,30,40 );
+			
+			}, 0.0025);
 			
 			
 			
