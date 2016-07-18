@@ -26,10 +26,18 @@
     
 	<script>
 	
-	   var Client;
+	   var Client = true;
 
 		
+		if (window.location.protocol !== 'https:') {
+		if(window.location.href.indexOf("localhost") > -1) {
+         
+        }else{
+		window.location = 'https://' + window.location.hostname + window.location.pathname + window.location.hash;
+		}
 		
+       
+       }
 		
 		function SetPos(){
 		
