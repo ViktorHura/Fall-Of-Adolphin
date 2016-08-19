@@ -137,6 +137,14 @@ function sethud(){
 			document.getElementById('JB').style.top = document.getElementById('Controls').style.top + 385;
 			document.getElementById('JB').style.zIndex = "3";
 			
+			if (document.getElementById('Volume')){
+				
+			document.getElementById('Volume').style.left = window.innerWidth - 50;	
+				
+				
+				
+			}
+			
 			
 			
 			document.getElementById('dialogBg').style.zIndex = "2";

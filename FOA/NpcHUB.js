@@ -1,6 +1,10 @@
 
 var agro;
  var canattack;
+
+ 
+var movenpc8 = false;
+ 
 var geometry1NPC = new THREE.PlaneGeometry( 30, 60, 1, 1 );
 var geometry2NPC = new THREE.PlaneGeometry( 30, 60, 1, 1 );
 			
@@ -51,6 +55,10 @@ var geometry2NPC = new THREE.PlaneGeometry( 30, 60, 1, 1 );
 			 var npc7;
 			 var mesh13;
 			 var mesh14;
+			 
+			  var npc8;
+			 var mesh15;
+			 var mesh16;
 			 
 ///////MAKE NPC//////////
 function createMarchingNpc (){
@@ -234,6 +242,33 @@ function createNpc7 (){
 
 }
 
+function createNpc8 (){
+
+             npc8 = new THREE.Object3D();
+			
+             scene.add( npc8 );
+
+                // mesh
+             mesh15 = new THREE.Mesh( geometry1NPC, material1NPC );
+            npc8.add( mesh15 );
+             mesh16 = new THREE.Mesh( geometry2NPC, material2NPC );
+            npc8.add( mesh16);
+			npc8.position.y = 33;
+			npc8.position.z = 662.5;
+			npc8.position.x = 830;
+			
+			 objects.push( mesh15 );
+			 objects.push( mesh16 );
+			 
+			npc8.rotation.y = Math.PI / 2; 
+
+			 
+			 mesh15.name = 'NPC8';
+			 mesh16.name = 'NPC8.2';
+
+}
+
+
 
 
 
@@ -247,6 +282,7 @@ createNpc4();
 createNpc5();
 createNpc6();
 createNpc7();
+createNpc8();
 
 
 
@@ -328,6 +364,7 @@ var NPCMarchingLoop = setInterval(function(){
 	var talked5 = false;
 	var talked6 = false;
 	var talked7 = false;
+	var talked8 = false;
 	var playeds = false;
 	var ppos = new THREE.Vector3(0,200,0);
 	var rotobj1 = new THREE.Object3D;
@@ -355,7 +392,7 @@ var attack = setInterval(function(){
 			HitPlayer(10); 
 			} 
             else{
-			MisPlayer();;
+			MisPlayer();
 			}			
 			 
 		 }	
@@ -387,6 +424,7 @@ var NPCLoop = setInterval(function(){
 	document.getElementById('dialog').innerHTML ="*Speaks in dolphin* I can't talk right now, I have my orders.*Speaks in dolphin*";	
 		talked1 = true;
 		if (playeds != 'Busy'){
+			createjs.Sound.stop();
 			createjs.Sound.play("Busy" , {volume: fxvolume });
 			playeds = 'Busy';
 		}
@@ -422,6 +460,7 @@ var NPCLoop = setInterval(function(){
 		talked2 = true;
 		
 		if (playeds != 'Busy'){
+			createjs.Sound.stop();
 			createjs.Sound.play("Busy" , {volume: fxvolume });
 			playeds = 'Busy';
 		}
@@ -454,6 +493,7 @@ var NPCLoop = setInterval(function(){
 		talked3 = true;
 		
 		if (playeds != 'NP'){
+			createjs.Sound.stop();
 			createjs.Sound.play("NoPass" , {volume: fxvolume });
 			playeds = 'NP';
 		}
@@ -490,6 +530,7 @@ var NPCLoop = setInterval(function(){
 		talked4 = true;
 		
 		if (playeds != 'NP'){
+			createjs.Sound.stop();
 			createjs.Sound.play("NoPass" , {volume: fxvolume });
 			playeds = 'NP';
 		}
@@ -523,6 +564,7 @@ var NPCLoop = setInterval(function(){
 		talked5 = true;
 		
 		if (playeds != 'NP'){
+			createjs.Sound.stop();
 			createjs.Sound.play("NoPass" , {volume: fxvolume });
 			playeds = 'NP';
 		}
@@ -556,6 +598,7 @@ var NPCLoop = setInterval(function(){
 		talked6 = true;
 		
 		if (playeds != 'NP'){
+			createjs.Sound.stop();
 			createjs.Sound.play("NoPass" , {volume: fxvolume });
 			playeds = 'NP';
 		}
@@ -588,6 +631,7 @@ var NPCLoop = setInterval(function(){
 		talked7 = true;
 		
 		if (playeds != 'NP'){
+			createjs.Sound.stop();
 			createjs.Sound.play("NoPass" , {volume: fxvolume });
 			playeds = 'NP';
 		}
@@ -600,16 +644,86 @@ var NPCLoop = setInterval(function(){
 	
 	}
 	
+	
+	
+	
+	
+	if( HitO.name == 'NPC8' || HitO.name == 'NPC8.2' ){
+	if (sessionStorage.getItem("Vodka") != 'false'){
+	getDistance(npc8, controls.getObject());
+    
+	if(distance < WingDistance && IsHitting == true){
+		agro = true;
+		
+	}
+	
+	if (distance < 100){
+	
+    document.getElementById('dialog').innerHTML ='[Press E]';
+	
+	if(Ekey == true || talked8 == true){
+	
+    if (sessionStorage.getItem("Vodka") == 'true'){	
+	
+	document.getElementById('dialog').innerHTML ="*Speaks in dolphin* Oh, is that?... I have my duties but vodka needs attention...*Speaks in dolphin*";		
+		talked8 = true;
+		
+		
+		
+		
+		if (playeds != 'G'){
+			createjs.Sound.stop();
+			createjs.Sound.play("Vodka" , {volume: fxvolume });
+			playeds = 'G';
+	    }
+		setTimeout(function(){ talked8 = false; movenpc8 = true;  playeds = false; sessionStorage.setItem("Vodka", "false");}, dialogtime);
+		
+	}
+    else{
+	
+    document.getElementById('dialog').innerHTML ="*Speaks in dolphin* YOU SHALL NOT PASS!*Speaks in dolphin*";		
+		talked8 = true;
+		
+		if (playeds != 'NP'){
+			createjs.Sound.stop();
+			createjs.Sound.play("NoPass" , {volume: fxvolume });
+			playeds = 'NP';
+		}	
+		
+		
+		setTimeout(function(){ talked8 = false;  playeds = false;}, dialogtime);
+	}	
+		
+		
+	
+	
+		
+	}
+	}
+	
+	}
+	}
+	
 	//////////////////////////////////////////////
 	
 	
 	
 	
 	
+	if (movenpc8 == true && npc8.position.x < 860){
+		
+		
+		npc8.position.x += 0.1;
+		canenterbar = true;
+	}
 	
 	
-	
-	
+	if (sessionStorage.getItem("Vodka") == 'false'){
+		
+		movenpc8 = true;
+		canenterbar = true;
+		
+	}
 	
 	
 	

@@ -5,6 +5,7 @@ createjs.Sound.registerSound("Sounds/DolphinBusy.ogg", 'Busy' );
 createjs.Sound.registerSound("Sounds/DolphinNP.ogg", 'NoPass' );
 createjs.Sound.registerSound("Sounds/Shot.ogg", 'Shot' );
 createjs.Sound.registerSound("Sounds/Hit.ogg", 'HitP' );
+createjs.Sound.registerSound("Sounds/Vodka.ogg", 'Vodka' );
 
 var stepspeed = 500;
 var stepped = false;

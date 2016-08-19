@@ -4,67 +4,9 @@
 		<title>Fall of Adolphin</title>
 		<img src="images/loading.gif" id="loadingscreen" style="position:absolute;left:12%;z-index: 50;width: 75%;height: 80%;visibility: visible;">
 		<img src="images/black.png" id="loadingscreenB" style="position:absolute;z-index: 49;width: 100%;height: 100%;visibility: visible;">
-		<style>
-			html, body {
-				width: 100%;
-				height: 100%;
-			}
-
-			body {
-				background-color: #ffffff;
-				margin: 0;
-				overflow: hidden;
-				font-family: arial;
-				cursor:url(images/Cursor.png), auto;
-			}
-			
-			
-			#blocker {
-
-				position: absolute;
-
-				width: 100%;
-				height: 100%;
-
-				
-
-			}
-			
-			
-
-			#instructions {
-
-				width: 100%;
-				height: 100%;
-
-				display: -webkit-box;
-				display: -moz-box;
-				display: box;
-
-				-webkit-box-orient: horizontal;
-				-moz-box-orient: horizontal;
-				box-orient: horizontal;
-                
-				
-				
-				-webkit-box-pack: center;
-				-moz-box-pack: center;
-				box-pack: center;
-
-				-webkit-box-align: center;
-				-moz-box-align: center;
-				box-align: center;
-
-				color: #ffffff;
-				text-align: center;
-
-				cursor:url(images/Cursor.png), auto;
-
-			}
-			
-            
-
-		</style>
+		
+		<link rel="stylesheet" type="text/css" href="Ingame.css">
+		
 	</head>
 	<body id='body' >
 	    
@@ -75,16 +17,17 @@
 		<script src="PointerLockControls.js"></script>
         <script src="https://code.createjs.com/soundjs-0.6.2.min.js"></script></head>
         <script src="SoundH3Under.js"></script>
-        
+        <script src="Missions.js"></script>
         
 		
 		<div id="blocker">
 
 			<div id="instructions">
 			
-				<img src="images/ResumeB.png"  id='Play' style="position:absolute;"	>
-				<img src="images/ExitB.png" onclick="window.open('index.html','_self',false)" id='Exit' style="position:absolute;"	>
+				<img src="images/ResumeB.png"  id='Play' class='Resume' style="position:absolute;"	>
+				<img src="images/ExitB.png" class='Exit' onclick="window.open('index.html','_self',false)" id='Exit' style="position:absolute;"	>
 				<img src="images/Controls.png"  id='Controls' style="position:absolute;">
+				<img src="images/Volume.png"  class='Volume' id='Volume' onclick='ToggleSound();' style="position:absolute;">
 				
 				<span id="WB"  style="position:absolute;font-size:150%;width: 650px;color: brown;">W</span>
 				<span id="AB"  style="position:absolute;font-size:150%;width: 650px;color: brown;">A</span>
@@ -120,6 +63,15 @@
 		    var IsHitting = false;
 			var ecooldown = false;
 			var tookGun = false;
+			var controlsEnabled = false;
+			var speed = 4;
+            var canmove = true;
+			var battle = false;
+			var soundvol = true;
+			
+			var Stuff;
+			
+			var WingDistance = 100;
 		  
 		     var loadingscreen = setInterval(function(){
 			
@@ -206,6 +158,7 @@
 					} else {
 
 						controls.enabled = false;
+						controlsEnabled = false;
 
 						blocker.style.display = '-webkit-box';
 						blocker.style.display = '-moz-box';
@@ -426,7 +379,12 @@
 				 map = obj;
 				 Light = obj.getObjectByName( "DiscoB", true );
 				 Disco = obj.getObjectByName( "Disco", true );
-				  
+				 Stuff = obj.getObjectByName( "Weed", true );
+				 
+				 objects.push(Stuff);
+				 
+				 missionstate = 3;
+					
                  scene.add( map );
 				 objects.push(map);
                  });
@@ -476,7 +434,6 @@
 			Light.color.b = 1;
 			
 			}
-			
 			
 			
 		
@@ -671,6 +628,31 @@
 			TestandPrevCol(controls.getObject(), BOXC20, 40,30,40 );
 			TestandPrevCol(controls.getObject(), BOXC21, 40,30,40 );
 			
+			
+			
+			
+			
+			if(controls.getObject().position.z > -25 && controls.getObject().position.z < 25 && controls.getObject().position.x > 265  && controls.getObject().position.x < 290){
+			
+			
+			document.getElementById('dialog').innerHTML ='[Press E]';
+			
+			if ( Ekey == true || killedall == true){
+			
+		   
+			
+			window.open ('Hub.html#Bar','_self',false);
+				
+		
+			}
+				
+			
+			
+			}
+			
+			
+			
+			
 			}, 0.0025);
 			
 			
@@ -726,7 +708,7 @@
 					for ( var i = 0; i < intersections.length; i++ ) {
 
 	             	//getDistance(intersections[ i ].object, controls.getObject());
-					HitO = intersections[ i ].object;
+					HitO = intersections[ 0 ].object;
 					
 	                }
 					
@@ -746,15 +728,17 @@
 
 					var time = performance.now();
 					var delta = ( time - prevTime ) / 1000;
-					var speed = 4;
 					
+					if (speed != 'none'){
 					if ( Sprint == true ){ 
 					//console.log(speed);
 					speed = 6;
 					}
 					else{
-					
+					if (speed == 'none'){
 					speed = 3.5;
+					}
+					}
 					}
 
 					velocity.x -= velocity.x * 10.0 * delta;
@@ -770,7 +754,8 @@
 					
 					}
 					
-  
+                    
+					
 					if ( moveForward ) velocity.z -= 400.0 * delta * speed;
 					if ( moveBackward ) velocity.z += 400.0 * delta * speed;
 
@@ -786,11 +771,13 @@
 					
 					
 					
-					
+					if (canmove == true){
 					
 					controls.getObject().translateX( velocity.x * delta );
 					controls.getObject().translateY( velocity.y * delta );
 					controls.getObject().translateZ( velocity.z * delta );
+					
+					}
 
 					if ( controls.getObject().position.y < 50 || controls.getObject().position.y == 50 ) {
 
@@ -831,9 +818,12 @@
 		</script>
 		<script src="Hud.js"></script>
 		
-	    <script src="CombatHub.js"></script>
+	    <script src="CombatBar.js"></script>
+		<script src='SoundBar.js'></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 		<script src='compatibility.js'></script>
+		<script src='NpcBAR.js'></script>
+        
         
 	</body>
 </html>

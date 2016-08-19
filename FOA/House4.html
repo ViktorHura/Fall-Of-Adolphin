@@ -4,67 +4,7 @@
 		<title>Fall of Adolphin</title>
 		<img src="images/loading.gif" id="loadingscreen" style="position:absolute;left:12%;z-index: 50;width: 75%;height: 80%;visibility: visible;">
 		<img src="images/black.png" id="loadingscreenB" style="position:absolute;z-index: 49;width: 100%;height: 100%;visibility: visible;">
-		<style>
-			html, body {
-				width: 100%;
-				height: 100%;
-			}
-
-			body {
-				background-color: #ffffff;
-				margin: 0;
-				overflow: hidden;
-				font-family: arial;
-				cursor:url(images/Cursor.png), auto;
-			}
-			
-			
-			#blocker {
-
-				position: absolute;
-
-				width: 100%;
-				height: 100%;
-
-				
-
-			}
-			
-			
-
-			#instructions {
-
-				width: 100%;
-				height: 100%;
-
-				display: -webkit-box;
-				display: -moz-box;
-				display: box;
-
-				-webkit-box-orient: horizontal;
-				-moz-box-orient: horizontal;
-				box-orient: horizontal;
-                
-				
-				
-				-webkit-box-pack: center;
-				-moz-box-pack: center;
-				box-pack: center;
-
-				-webkit-box-align: center;
-				-moz-box-align: center;
-				box-align: center;
-
-				color: #ffffff;
-				text-align: center;
-
-				cursor:url(images/Cursor.png), auto;
-
-			}
-			
-            
-
-		</style>
+		<link rel="stylesheet" type="text/css" href="Ingame.css">
 	</head>
 	<body id='body'>
 		<script src="Three.js"></script>
@@ -78,8 +18,8 @@
 
 			<div id="instructions">
 			   
-				<img src="images/ResumeB.png"  id='Play' style="position:absolute;"	>
-				<img src="images/ExitB.png" onclick="window.open('index.html','_self',false)" id='Exit' style="position:absolute;"	>
+				<img src="images/ResumeB.png"  id='Play' class='Resume' style="position:absolute;"	>
+				<img src="images/ExitB.png" class='Exit' onclick="window.open('index.html','_self',false)" id='Exit' style="position:absolute;"	>
 				
 				<img src="images/Controls.png"  id='Controls' style="position:absolute;">
 				
@@ -486,6 +426,7 @@
 			progression = 1;
 			document.getElementById('dialog').innerHTML ='Hey psst, come closer.' + '<br>'+'[Press E]';
 			if(playeds == 0){
+			createjs.Sound.stop();
 			createjs.Sound.play("R1" , {volume: fxvolume });
 			playeds = 1;
 			}
@@ -495,6 +436,7 @@
 			setTimeout(function(){ progression = 3;}, 1000);		
 			document.getElementById('dialog').innerHTML ="So you want to get inside the bunker huh? I left my stuff at the bar, but they won't let me inside. If you help me I can help you as well." + '<br>'+'[Press E]';
 			if(playeds == 1){
+			createjs.Sound.stop();
 			createjs.Sound.play("R2" , {volume: fxvolume });
 			playeds = 2;
 	        
@@ -506,6 +448,7 @@
 			setTimeout(function(){ progression = 5;}, 1000);	
 			document.getElementById('dialog').innerHTML ="Ok, deal. First, take the Vodka. You can't get inside without it. Then find the bartender. Tell him 'Rasta' needs the stuff. Then bring the stuff back to me." + '<br>'+'[Press E]';
 			if(playeds == 2){
+			createjs.Sound.stop();
 			createjs.Sound.play("R3" , {volume: fxvolume });
 			playeds = 3;
 			}
@@ -517,6 +460,7 @@
 			cantv = true;
 			document.getElementById('dialog').innerHTML ="Good luck, señor Gunter.";
 			if(playeds == 3){
+			createjs.Sound.stop();
 			createjs.Sound.play("R4" , {volume: fxvolume });
 			playeds = 4;
 			}
@@ -751,6 +695,34 @@
 					npc.rotation.y = rotObj1.rotation.y + 3.14;
 					
 					if (sessionStorage.getItem("Vodka") == 'true'){ 
+					
+					progression = 6;
+			        cantv = false;
+			        document.getElementById('dialog').innerHTML ="Good luck, señor Gunter.";
+					
+					
+				    objects.pop();
+			        scene.remove(Vodka);
+		            tookvodka = true;
+					
+					
+					}
+					
+					if (sessionStorage.getItem("Vodka") == 'false'){ 
+					
+					progression = 6;
+			        cantv = false;
+			        document.getElementById('dialog').innerHTML ="Good luck, señor Gunter.";
+					
+					
+				    objects.pop();
+			        scene.remove(Vodka);
+		            tookvodka = true;
+					
+					
+					}
+					
+					if (sessionStorage.getItem("Vodka") == 'false' && sessionStorage.getItem("Stuff") == 'true'){ 
 					
 					progression = 6;
 			        cantv = false;
