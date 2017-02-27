@@ -708,7 +708,7 @@
 					
 					}
 					
-					if (sessionStorage.getItem("Vodka") == 'false'){ 
+					if (sessionStorage.getItem("Vodka") == 'false'&& sessionStorage.getItem("Stuff") != 'false'){ 
 					
 					progression = 6;
 			        cantv = false;
@@ -724,9 +724,41 @@
 					
 					if (sessionStorage.getItem("Vodka") == 'false' && sessionStorage.getItem("Stuff") == 'true'){ 
 					
-					progression = 6;
+					progression = 7;
+					missionstate = 7;
+					
 			        cantv = false;
-			        document.getElementById('dialog').innerHTML ="Good luck, señor Gunter.";
+			        document.getElementById('dialog').innerHTML ="I knew you could do it! I have unlocked House 6 so you can sneak into the bunker. Good luck señor Gunter. ";
+					
+					sessionStorage.setItem("Stuff", "false");
+					
+					
+			        createjs.Sound.stop();
+			        createjs.Sound.play("R5" , {volume: fxvolume });
+			
+					
+					
+					
+				    objects.pop();
+			        scene.remove(Vodka);
+		            tookvodka = true;
+					
+					
+					}					
+					else if (sessionStorage.getItem("Vodka") == 'false' && sessionStorage.getItem("Stuff") == 'false'){ 
+					
+					progression = 7;
+					missionstate = 7;
+					
+			        cantv = false;
+			        document.getElementById('dialog').innerHTML ="I knew you could do it! I have unlocked House 6 so you can sneak into the bunker. Good luck señor Gunter. ";
+					
+					sessionStorage.setItem("Stuff", "false");
+					
+					
+			       
+			
+					
 					
 					
 				    objects.pop();
@@ -735,7 +767,6 @@
 					
 					
 					}
-					
 					
                      
 				

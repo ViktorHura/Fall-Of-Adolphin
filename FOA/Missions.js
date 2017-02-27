@@ -85,6 +85,11 @@ if (missionstate == 6){
 	MbarD.innerHTML = 'Mission: Bring the stuff to Rasta';
 	
 }
+if (missionstate == 7){
+	
+	MbarD.innerHTML = 'Mission: Go to House 6';
+	
+}
 
 			
 			

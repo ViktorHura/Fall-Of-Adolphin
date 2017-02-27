@@ -5,6 +5,7 @@ createjs.Sound.registerSound("Sounds/Rasta1.ogg", 'R1' );
 createjs.Sound.registerSound("Sounds/Rasta2.ogg", 'R2' );
 createjs.Sound.registerSound("Sounds/Rasta3.ogg", 'R3' );
 createjs.Sound.registerSound("Sounds/Rasta4.ogg", 'R4' );
+createjs.Sound.registerSound("Sounds/R5.ogg", 'R5' );
 
 
 var stepspeed = 500;

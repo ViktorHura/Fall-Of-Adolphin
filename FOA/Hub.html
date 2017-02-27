@@ -618,7 +618,7 @@
 			
 		   
 			
-			window.open ('/House2/House2.html','_self',false);
+			window.open ('/FOA/House2/House2.html','_self',false);
 				
 		
 			}
@@ -677,8 +677,13 @@
 			if ( Ekey == true ){
 			
 		    dummy = true;
+			if (missionstate == 7){
+			window.open ('House5.html','_self',false);
+			
+			}else{
 			document.getElementById('dialog').innerHTML ='This door seems to be locked...';
 			//window.open ('House5.html','_self',false);
+			}
 			setTimeout(function(){ dummy = false; }, dialogtime);	
 		
 			}
@@ -779,7 +784,13 @@
 					
 					if (hash == 'Vodka' && sessionStorage.getItem("Vodka") != 'false'){ sessionStorage.setItem("Vodka", "true"); }
 				    
+					if (sessionStorage.getItem("Vodka") == 'false' && sessionStorage.getItem("Stuff") == 'false'){
 					
+					missionstate = 7;
+					
+					
+					
+					}
 					
 					
 					
