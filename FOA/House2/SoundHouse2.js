@@ -1,8 +1,8 @@
 
 
-createjs.Sound.registerSound("/../Sounds/woodstep.ogg", 'StepSound' );
-createjs.Sound.registerSound("/../Sounds/Penguin1.ogg", 'Penguin1' );
-createjs.Sound.registerSound("/../Sounds/Penguin2.ogg", 'Penguin2' );
+createjs.Sound.registerSound("/../FOA/Sounds/woodstep.ogg", 'StepSound' );
+createjs.Sound.registerSound("/../FOA/Sounds/Penguin1.ogg", 'Penguin1' );
+createjs.Sound.registerSound("/../FOA/Sounds/Penguin2.ogg", 'Penguin2' );
 
 var stepspeed = 500;
 var stepped = false;
