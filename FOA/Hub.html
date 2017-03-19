@@ -719,10 +719,12 @@
 			
 			if ( Ekey == true ){
 			
-		   
+		    if (missionstate > 5){
 			
+			document.getElementById('dialog').innerHTML ='The owner has closed the bar...';
+			}else{
 			window.open ('Bar.html','_self',false);
-				
+			}	
 		
 			}
 				
